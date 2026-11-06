@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>№6 зертханалық жұмыс · Өткізгіштерді параллель қосу</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ff;--card:#fff;--ink:#1b1740;--mut:#6b6890;--line:#e6e2fb;--pri:#6c3cf0;--pri2:#ff7a3d;--yel:#ffc928;--ok:#12a566;--okb:#dcf6ea;--okbd:#a8e6c8;--bad:#e5384f;--badb:#fde3e7;--badbd:#f7b4bf;--sh:0 10px 30px rgba(60,30,160,.12);--box:#faf9ff;--boxy:#fff8dc;--boxyb:#ffe08a;--boxo:#fff0e8;--boxob:#ffc9ad;--thbg:#efeaff;--aib:#f3efff;--inp:#fff;--navbg:rgba(255,255,255,.95);--chip:#efeaff;--qok:#f2fcf7;--qno:#fff6f7;--hov:#f3efff;color-scheme:light}
+[data-theme=dark]{--bg:#13112a;--card:#1f1c3d;--ink:#ece8ff;--mut:#a7a2cf;--line:#38326a;--pri:#9a78ff;--okb:#12382a;--okbd:#1f6b4d;--ok:#44d49a;--badb:#42202a;--badbd:#7d3040;--bad:#ff6b80;--sh:0 10px 30px rgba(0,0,0,.45);--box:#272350;--boxy:#3b3416;--boxyb:#6b5a1c;--boxo:#3d2a1f;--boxob:#7a4a30;--thbg:#2c2860;--aib:#2a2558;--inp:#171534;--navbg:rgba(31,28,61,.95);--chip:#2c2860;--qok:#133226;--qno:#3a1c25;--hov:#2a2558;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Nunito,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;transition:background .25s,color .25s}
+.mono{font-family:'JetBrains Mono',monospace}
+#top{position:sticky;top:0;z-index:40;background:var(--navbg);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+#tb{display:flex;gap:8px;align-items:center;padding:8px 12px;flex-wrap:wrap}
+#tb .sp{flex:1}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--ink);font:800 .82rem Nunito;padding:7px 12px;cursor:pointer}
+.seg button.on{background:var(--pri);color:#fff}
+.tbb{border:2px solid var(--line);background:var(--card);color:var(--ink);font:800 .85rem Nunito;border-radius:12px;padding:6px 12px;cursor:pointer}
+.tbb:hover{border-color:var(--pri)}.tbb.on{background:var(--yel);color:#1b1740;border-color:#e6a800}
+nav{display:flex;gap:6px;overflow-x:auto;padding:0 12px 8px}
+nav a{white-space:nowrap;text-decoration:none;color:var(--ink);font-weight:800;font-size:.82rem;padding:6px 12px;border-radius:99px;background:var(--chip)}
+nav a:hover{background:var(--pri);color:#fff}
+.hero{background:radial-gradient(700px 400px at 90% 0,rgba(255,201,40,.45),transparent 60%),radial-gradient(600px 400px at 0 100%,rgba(255,122,61,.5),transparent 60%),linear-gradient(135deg,#2a1670,#5b2fe0);color:#fff;padding:40px 18px 56px;position:relative;overflow:hidden}
+.hero .w{max-width:1100px;margin:auto;position:relative;z-index:2}
+.tag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:3px 12px;border-radius:99px;font-weight:700;font-size:.8rem;margin:0 6px 6px 0}
+.hero h1{font-size:clamp(1.8rem,4.5vw,3.2rem);line-height:1.1;margin:14px 0 8px;font-weight:900}
+.hero h1 em{font-style:normal;color:var(--yel)}
+.hero p{max-width:720px;opacity:.92}
+.bolt{position:absolute;right:4%;top:12%;font-size:11rem;opacity:.13;transform:rotate(12deg);z-index:1}
+main{max-width:1100px;margin:0 auto;padding:18px 14px 120px}
+section.card{background:var(--card);border-radius:22px;box-shadow:var(--sh);padding:22px;margin:22px 0;scroll-margin-top:110px}
+h2{margin:0 0 14px;font-size:1.45rem;display:flex;align-items:center;gap:10px}
+h2 .n{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:12px;min-width:36px;height:36px;display:grid;place-items:center;font-size:1rem;padding:0 6px;flex:none}
+h3{margin:16px 0 6px}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.box{border-radius:16px;padding:14px 16px;border:2px solid var(--line);background:var(--box)}
+.box.y{background:var(--boxy);border-color:var(--boxyb)}.box.o{background:var(--boxo);border-color:var(--boxob)}.box.g{background:var(--okb);border-color:var(--okbd)}.box.r{background:var(--badb);border-color:var(--badbd)}
+.box h4{margin:0 0 6px}
+ul,ol{margin:6px 0;padding-left:22px}li{margin:3px 0}
+.fm{background:#1b1740;color:#fff;border-radius:14px;padding:12px 16px;margin:8px 0;font-size:1.15rem;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.fm b{color:var(--yel)}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .25em;font-size:.95em}.fr i{font-style:normal;padding:0 .3em}.fr i:first-child{border-bottom:1.5px solid currentColor}
+figure{margin:0;border-radius:16px;overflow:hidden;border:2px solid var(--line);background:var(--card);display:flex;flex-direction:column}
+figure .im{aspect-ratio:4/3;background:linear-gradient(135deg,#ece6ff,#fff4e6);display:grid;place-items:center;overflow:hidden}
+figure img{width:100%;height:100%;object-fit:cover}figure .im svg{width:78%;height:78%}
+figcaption{padding:10px 12px;font-size:.9rem}figcaption b{font-size:1rem;display:block}
+figcaption a{font-size:.78rem;font-weight:800;color:var(--pri)}
+.btn{border:0;cursor:pointer;font:800 .95rem Nunito;border-radius:12px;padding:10px 18px;color:#fff;background:linear-gradient(135deg,var(--pri),#8a5cff);box-shadow:0 4px 0 #4a24b8;transition:.1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #4a24b8}
+.btn.o{background:linear-gradient(135deg,var(--pri2),#ffa02e);box-shadow:0 4px 0 #c2501b}
+.btn.s{background:var(--chip);color:var(--pri);box-shadow:0 3px 0 var(--line);padding:7px 12px}
+input[type=text],input[type=number],input[type=date],textarea,select{font:700 1rem Nunito;border:2px solid var(--line);border-radius:10px;padding:7px 10px;width:120px;background:var(--inp);color:var(--ink)}
+textarea{width:100%;min-height:70px}input:focus,textarea:focus{outline:0;border-color:var(--pri)}
+.fb{margin-top:10px}.vd{display:inline-block;font-weight:900;padding:4px 12px;border-radius:99px}.vd.good{background:var(--okb);color:var(--ok)}.vd.bad{background:var(--badb);color:var(--bad)}
+.aib{margin-top:8px;background:var(--aib);border-left:5px solid var(--pri);border-radius:10px;padding:10px 12px;font-size:.95rem}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.meter{background:linear-gradient(#3a3a46,#1f1f27);border-radius:14px;padding:10px;display:inline-block;box-shadow:0 8px 18px rgba(0,0,0,.3);width:280px;max-width:100%}
+.meter svg{display:block;width:100%;border-radius:8px}
+table{border-collapse:collapse;width:100%}th,td{border:2px solid var(--line);padding:6px;text-align:center}th{background:var(--thbg);font-size:.85rem}td input{width:90px}
+.scroll{overflow-x:auto}
+.stu{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}.stu label{font-weight:800;font-size:.9rem;display:block}.stu input{width:100%;margin-top:4px}
+@media(max-width:640px){.stu{grid-template-columns:1fr}}
+#lab{width:100%;border-radius:18px;border:4px solid #b9ad8c;touch-action:none;user-select:none;-webkit-user-select:none;background:#d8d0bb}
+#lab .dev{cursor:grab}#lab .dev:active{cursor:grabbing}
+.term{cursor:pointer}.term:hover circle:first-child{stroke:#ff7a3d;stroke-width:4}
+.wire{cursor:pointer;pointer-events:stroke}.hint{font-size:.85rem;color:var(--mut)}
+.pill{padding:5px 12px;border-radius:99px;border:2px solid var(--line);cursor:pointer;font-weight:800;background:var(--card);color:var(--ink)}.pill.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.q{padding:12px;border:2px solid var(--line);border-radius:14px;margin:10px 0}.q label{display:block;padding:4px 8px;border-radius:8px;cursor:pointer}.q label:hover{background:var(--hov)}
+.q.ok{border-color:var(--okbd);background:var(--qok)}.q.no{border-color:var(--badbd);background:var(--qno)}
+.app{display:inline-block;border:2px solid var(--line);border-radius:14px;padding:10px 12px;margin:4px;cursor:pointer;text-align:center;background:var(--card);user-select:none;min-width:118px}
+.app.on{background:var(--yel);border-color:#e6a800;color:#1b1740;transform:translateY(-2px)}.app.on .hint{color:#4b4520}.app .e{font-size:2rem}
+#trip{display:none;background:var(--bad);color:#fff;font-weight:900;padding:10px;border-radius:12px;margin:8px 0}
+.simsvg{width:100%;max-width:760px;display:block;border-radius:16px;border:2px solid var(--line);background:linear-gradient(#f3efe2,#e6dfc9)}
+.simsvg text{font-family:Nunito,sans-serif}
+.fl{stroke:#ff7a3d;stroke-width:5;stroke-dasharray:10 8;animation:fw 1s linear infinite}.dead{stroke:#9a97b8;stroke-width:5}
+@keyframes fw{to{stroke-dashoffset:-18}}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:2px solid var(--line);border-radius:12px;margin:8px 0;cursor:pointer;background:var(--box)}
+.chk input{width:22px;height:22px;accent-color:var(--pri);flex:none;margin-top:3px}
+.bar{height:14px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--pri2));width:0;transition:.3s}
+.pr th{width:32%;text-align:left}.pr td{text-align:left}.pr td textarea,.pr td input{width:100%}
+.sen-only{display:none}body.sen .sen-only{display:revert}.hid{display:none!important}
+.stp{display:flex;gap:12px;align-items:center;background:var(--card);border:3px solid var(--line);border-radius:16px;padding:12px 16px;margin:8px 0;font-weight:800;font-size:1.1rem}
+.stp .no{background:var(--pri);color:#fff;border-radius:50%;width:38px;height:38px;display:grid;place-items:center;flex:none}
+body.sen{font-size:1.2rem;letter-spacing:.015em;line-height:1.9}
+body.sen .btn{font-size:1.1rem;padding:14px 22px}body.sen input,body.sen textarea,body.sen select{font-size:1.1rem}
+body.sen .sen-hide{display:none!important}body.sen *{animation:none!important;scroll-behavior:auto}
+body.sen section.card{border:3px solid var(--line)}
+#toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:800;z-index:99;display:none;max-width:90vw}
+#barsik{position:fixed;right:14px;bottom:14px;z-index:50;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#bb{width:92px;height:92px;border-radius:50%;background:#fff;box-shadow:0 8px 24px rgba(60,30,160,.35);cursor:pointer;padding:0;border:3px solid var(--yel)}
+#bb:hover{transform:scale(1.07) rotate(-4deg)}#bb svg{width:100%;height:100%}
+.tail{transform-origin:70px 88px;animation:wag 1.4s ease-in-out infinite}@keyframes wag{50%{transform:rotate(18deg)}}
+.eye{transform-origin:center;transform-box:fill-box;animation:bl 4s infinite}@keyframes bl{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+#bsay{background:var(--card);border-radius:14px 14px 4px 14px;padding:8px 12px;font-weight:800;font-size:.85rem;box-shadow:var(--sh);max-width:210px}
+#bp{display:none;width:min(360px,calc(100vw - 28px));height:min(470px,70vh);background:var(--card);border-radius:20px;box-shadow:0 14px 40px rgba(40,20,120,.35);flex-direction:column;overflow:hidden;border:2px solid var(--pri)}
+#bp header{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:10px 14px;font-weight:900;display:flex;justify-content:space-between;align-items:center}
+#bm{flex:1;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--box)}
+.m{padding:8px 12px;border-radius:14px;max-width:86%;font-size:.93rem;white-space:pre-wrap}.m.b{background:var(--aib);align-self:flex-start}.m.u{background:var(--pri);color:#fff;align-self:flex-end}
+#bf{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}#bf input{flex:1;width:auto}
+#bch{display:flex;gap:6px;flex-wrap:wrap;padding:8px;border-top:1px solid var(--line);max-height:96px;overflow:auto}
+#bch button{border:2px solid var(--line);background:var(--chip);color:var(--pri);font:800 .75rem Nunito;border-radius:99px;padding:4px 10px;cursor:pointer}
+#bch button:hover{border-color:var(--pri)}
+footer{text-align:center;color:var(--mut);padding:20px;font-size:.85rem}
+@media print{
+ #top,#barsik,.btn,.tbb,#toast,.noprint,nav{display:none!important}
+ body{background:#fff;font-size:11pt}
+ section.card{box-shadow:none;border:1px solid #bbb;break-inside:avoid;margin:10px 0;padding:14px}
+ .hero{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:20px 18px}.bolt{display:none}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ input,textarea{border:1px solid #888!important}
+ main{padding:0}
+}
+</style>
+</head>
+<body>
+<div id="top">
+<div id="tb">
+ <div class="seg" id="langs"><button data-lg="0">ҚАЗ</button><button data-lg="1">РУС</button><button data-lg="2">ENG</button></div>
+ <button class="tbb" id="senb" data-it="tb_sent"><span data-i="tb_sen"></span></button>
+ <button class="tbb" id="themeb"></button>
+ <span class="sp"></span>
+ <button class="tbb" id="prb" data-i="tb_print"></button><button class="tbb" id="pdfb" data-i="tb_pdf"></button>
+</div>
+<nav><a href="#stu" data-i="n0"></a><a href="#s1" data-i="n1"></a><a href="#s2" data-i="n2"></a><a href="#s3" data-i="n3"></a><a href="#s4" data-i="n4"></a><a href="#s5" data-i="n5"></a><a href="#lab-sec" data-i="n6"></a><a href="#s7" data-i="n7"></a><a href="#s8" class="sen-hide" data-i="n8"></a><a href="#s9" data-i="n9"></a><a href="#s10" data-i="n10"></a><a href="#s11" data-i="n11"></a></nav>
+</div>
+<div id="toast"></div>
+
+<header class="hero"><div class="bolt">⚡</div><div class="w">
+<span class="tag" data-i="hero_t1"></span><span class="tag" data-i="hero_t2"></span><span class="tag">8.4.2.10</span><span class="tag">8.1.3.3</span>
+<h1 data-i="hero_h"></h1>
+<p data-i="hero_p"></p>
+<a class="btn o noprint" href="#lab-sec" style="text-decoration:none;display:inline-block" data-i="hero_btn"></a>
+</div></header>
+
+<main>
+<section class="card" id="stu"><div class="stu">
+<label><span data-i="st_name"></span><input type="text" id="st1" autocomplete="name"></label>
+<label><span data-i="st_class"></span><input type="text" id="st2"></label>
+<label><span data-i="st_date"></span><input type="date" id="st3"></label>
+</div></section>
+
+<section class="card sen-only" id="senc">
+<h2 data-i="sen_t"></h2>
+<p data-i="sen_intro"></p>
+<div class="stp"><span class="no">1</span><span data-i="sen_s1"></span></div>
+<div class="stp"><span class="no">2</span><span data-i="sen_s2"></span></div>
+<div class="stp"><span class="no">3</span><span data-i="sen_s3"></span></div>
+<div class="stp"><span class="no">4</span><span data-i="sen_s4"></span></div>
+<div class="stp"><span class="no">5</span><span data-i="sen_s5"></span></div>
+<div class="box y" id="senw" data-i="sen_w"></div>
+<div class="row"><button class="btn s" data-say="senw" data-i="sen_listen"></button></div>
+</section>
+
+<section class="card" id="s1"><h2><span class="n">1</span><span data-i="s1_h2"></span></h2>
+<div class="grid g2">
+<div class="box y" data-i="s1_q"></div>
+<div class="box o" data-i="s1_g"></div>
+<div class="box" data-i="s1_o"></div>
+<div class="box" data-i="s1_t"></div>
+<div class="box g" data-i="s1_h"></div>
+<div class="box" data-i="s1_v"></div>
+</div></section>
+
+<section class="card" id="s2"><h2><span class="n">2</span><span data-i="s2_h2"></span></h2>
+<p class="hint noprint" data-i="s2_hint"></p>
+<div class="grid g3" id="eq"></div></section>
+
+<section class="card" id="s3"><h2><span class="n">3</span><span data-i="s3_h2"></span></h2>
+<div class="grid g2"><div class="box r" data-i="s3_l"></div>
+<div class="box y" data-i="s3_w"></div></div></section>
+
+<section class="card" id="s4"><h2><span class="n">4</span><span data-i="s4_h2"></span></h2>
+<p data-i="s4_p"></p>
+<div class="fm"><span><b>1.</b> U = U<sub>1</sub> = U<sub>2</sub></span><span><b>2.</b> I = I<sub>1</sub> + I<sub>2</sub></span></div>
+<div class="fm"><span><b>3.</b> <span class="fr"><i>1</i><i>R</i></span> = <span class="fr"><i>1</i><i>R<sub>1</sub></i></span> + <span class="fr"><i>1</i><i>R<sub>2</sub></i></span></span><span>R = <span class="fr"><i>R<sub>1</sub>·R<sub>2</sub></i><i>R<sub>1</sub> + R<sub>2</sub></i></span></span><span><b>4.</b> I = <span class="fr"><i>U</i><i>R</i></span></span></div>
+<div class="box g" data-i="s4_n"></div>
+<div class="sen-only box y" id="senth"><h4 data-i="sen_th_t"></h4><div data-i="sen_th"></div><div class="row"><button class="btn s" data-say="senth" data-i="sen_listen"></button></div></div>
+</section>
+
+<section class="card" id="s5"><h2><span class="n">5</span><span data-i="s5_h2"></span></h2>
+<p data-i="s5_p"></p>
+<h3 data-i="dv_t1"></h3><div id="dvbox1"></div>
+<h3 data-i="dv_t2"></h3><div id="dvbox2"></div>
+</section>
+
+<section class="card" id="lab-sec"><h2><span class="n">▶</span><span data-i="lab_h2"></span></h2>
+<div class="box y" data-i="lab_how"></div>
+<svg id="lab" viewBox="0 0 980 600"></svg>
+<div class="row"><button class="btn" id="chk" data-i="lab_chk"></button><button class="btn s" id="clr" data-i="lab_clr"></button><button class="btn s" id="rst" data-i="lab_rst"></button><button class="btn s sen-only noprint" id="hintb" data-i="sen_schem_btn"></button><span class="hint" id="sel"></span></div>
+<div class="box sen-only hid" id="schem"><b data-i="sen_schem_t"></b>
+<svg viewBox="0 0 470 210" style="width:100%;max-width:560px;color:var(--ink);display:block" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+<path d="M24 82H56M32 96H48M40 40V82M40 96V170M40 40H84M136 40H184M216 40H410M40 170H410M84 40L128 16"/>
+<circle cx="84" cy="40" r="4" fill="currentColor"/><circle cx="136" cy="40" r="4" fill="currentColor"/>
+<circle cx="200" cy="40" r="16" fill="var(--card)"/>
+<path d="M290 40V84M290 126V170M350 40V84M350 126V170M410 40V89M410 121V170"/>
+<rect x="276" y="84" width="28" height="42" fill="var(--card)"/><rect x="336" y="84" width="28" height="42" fill="var(--card)"/><circle cx="410" cy="105" r="16" fill="var(--card)"/>
+<circle cx="290" cy="40" r="4" fill="currentColor"/><circle cx="350" cy="40" r="4" fill="currentColor"/><circle cx="290" cy="170" r="4" fill="currentColor"/><circle cx="350" cy="170" r="4" fill="currentColor"/>
+<g fill="currentColor" stroke="none" font-weight="800" font-size="15" font-family="Nunito,sans-serif"><text x="196" y="45">A</text><text x="405" y="110">V</text><text x="104" y="68">K</text><text x="308" y="110">R₁</text><text x="368" y="110">R₂</text><text x="62" y="86">+</text><text x="62" y="104">−</text></g></svg></div>
+<div class="fb" id="fb-lab"></div>
+<div id="meas" style="display:none">
+<h3 data-i="meas_h"></h3>
+<div class="row"><button class="btn o" id="keyb"></button><b data-i="meas_am"></b>
+<span class="pill on" data-p="0" data-i="meas_p0"></span><span class="pill" data-p="1" data-i="meas_p1"></span><span class="pill" data-p="2" data-i="meas_p2"></span></div>
+<p class="hint"><span data-i="meas_hint"></span> <b id="uu"></b></p></div></section>
+
+<section class="card" id="s7"><h2><span class="n">7</span><span data-i="s7_h2"></span></h2>
+<p data-i="s7_p"></p>
+<div class="scroll"><table><tr><th data-i="h_u"></th><th data-i="h_i1"></th><th data-i="h_i2"></th><th data-i="h_i"></th><th data-i="h_is"></th><th data-i="h_r1"></th><th data-i="h_r2"></th><th data-i="h_r"></th></tr>
+<tr id="trow"><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td><td><input type="number" step="any"></td></tr></table></div>
+<div class="row"><button class="btn" id="tchk" data-i="t_chk"></button></div><div class="fb" id="fb-tbl"></div>
+<h3 data-i="s7_ch"></h3><p data-i="s7_cp"></p>
+<textarea id="concl" style="width:100%"></textarea><div class="row"><button class="btn" id="cchk" data-i="c_chk"></button></div><div class="fb" id="fb-con"></div></section>
+
+<section class="card sen-hide" id="s8"><h2><span class="n">8</span><span data-i="s8_h2"></span></h2>
+<div class="row" id="gser"></div>
+<svg id="gr" viewBox="0 0 620 400" style="width:100%;max-width:720px;background:#fff;border:2px solid var(--line);border-radius:14px;touch-action:manipulation;color:#1b1740"></svg>
+<div class="row"><button class="btn" id="gchk" data-i="g_chk"></button><button class="btn s" id="gclr" data-i="g_clr"></button></div><div class="fb" id="fb-grf"></div></section>
+
+<section class="card" id="s9"><h2><span class="n">9</span><span data-i="s9_h2"></span></h2>
+<p data-i="s9_p"></p>
+<div id="simbox"></div>
+<div class="grid g2" style="margin-top:14px"><div class="box"><h4 data-i="l2_h"></h4><span data-i="l2_b"></span><div class="row"><input type="number" step="any" id="l2"> <span data-i="u_Om"></span> <button class="btn" data-l="2" data-i="chk_s"></button></div><span data-i="l2_q"></span> <div class="row"><select id="l2b" style="width:auto"><option value="" data-i="l2_o0"></option><option value="1" data-i="l2_o1"></option><option value="0" data-i="l2_o2"></option></select></div><div class="fb" id="fb-l2"></div></div></div>
+<h3 data-i="l3_h"></h3>
+<p data-i="l3_p"></p>
+<div id="apps"></div><div id="trip" data-i="l_trip"></div>
+<div class="row"><div class="meter" style="width:240px"><svg viewBox="0 0 200 130" id="gdial"></svg></div><div><div style="font-size:2rem;font-weight:900" id="gI">0</div><div class="hint" id="gP"></div></div></div>
+<div class="row"><button class="btn" data-l="3" data-i="chk_s"></button><button class="btn s" id="greset" data-i="l3_reset"></button></div><div class="fb" id="fb-l3"></div>
+<h3 data-i="l4_h"></h3><div class="box"><span data-i="l4_q"></span><textarea id="l4"></textarea><div class="row"><button class="btn" data-l="4" data-i="chk_s"></button></div><div class="fb" id="fb-l4"></div></div></section>
+
+<section class="card" id="s10"><h2><span class="n">10</span><span data-i="s10_h2"></span></h2><div id="test"></div>
+<div class="row"><button class="btn o" id="tsub" data-i="ts_chk"></button></div><div class="fb" id="fb-test"></div></section>
+
+<section class="card" id="s11"><h2><span class="n">11</span><span data-i="s11_h2"></span></h2>
+<div id="sa"></div>
+<div class="bar"><i id="sab"></i></div><b id="sac"></b>
+<h3 data-i="pr_h"></h3>
+<div class="scroll"><table class="pr">
+<tr><th data-i="pr_1"></th><td><input type="text" id="pr1" style="width:100%"></td></tr>
+<tr><th data-i="pr_2"></th><td><textarea id="pr2"></textarea></td></tr>
+<tr><th data-i="pr_3"></th><td><textarea id="pr3"></textarea></td></tr>
+<tr><th data-i="pr_4"></th><td><textarea id="pr4"></textarea></td></tr></table></div>
+</section>
+</main>
+<footer data-i="foot"></footer>
+
+<div id="barsik"><div id="bsay" data-i="b_hi"></div>
+<div id="bp"><header><span data-i="b_title"></span><span><span id="gear" style="cursor:pointer" title="API">⚙️</span> <span id="bx" style="cursor:pointer">✖</span></span></header><div id="bm"></div>
+<div id="bch"></div><form id="bf"><input type="text" id="bi" data-ip="b_ph" autocomplete="off"><button class="btn" style="padding:8px 12px">➤</button></form></div>
+<button id="bb" aria-label="Барсик"><svg viewBox="0 0 100 100"><g class="tail"><path d="M72 88 Q96 80 90 56" stroke="#f08a2c" stroke-width="9" fill="none" stroke-linecap="round"/></g><ellipse cx="50" cy="84" rx="26" ry="14" fill="#f5a14b"/><path d="M22 36 L26 8 L44 24Z M78 36 L74 8 L56 24Z" fill="#f08a2c"/><path d="M27 14 L31 25 L38 22Z M73 14 L69 25 L62 22Z" fill="#ffb3b3"/><ellipse cx="50" cy="52" rx="32" ry="29" fill="#f5a14b"/><path d="M50 24 v10 M40 26 l3 8 M60 26 l-3 8" stroke="#c9691b" stroke-width="4" stroke-linecap="round"/><ellipse cx="50" cy="62" rx="15" ry="11" fill="#ffe9cf"/><g class="eye"><ellipse cx="37" cy="50" rx="6" ry="7.5" fill="#fff"/><circle cx="38" cy="51" r="4" fill="#1b1740"/><circle cx="39.5" cy="49" r="1.5" fill="#fff"/></g><g class="eye"><ellipse cx="63" cy="50" rx="6" ry="7.5" fill="#fff"/><circle cx="62" cy="51" r="4" fill="#1b1740"/><circle cx="63.5" cy="49" r="1.5" fill="#fff"/></g><path d="M46 58 h8 l-4 5z" fill="#ff7a8a"/><path d="M50 63 q-5 7 -10 3 M50 63 q5 7 10 3" stroke="#1b1740" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M30 60 l-16 -3 M30 65 l-16 4 M70 60 l16 -3 M70 65 l16 4" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/></svg></button></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],R2=(x,d=2)=>+x.toFixed(d),rnd=a=>a[Math.floor(Math.random()*a.length)];
+const store={get(k){try{return localStorage.getItem(k)||''}catch(e){return ''}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let li=+store.get('lg')||0;if(![0,1,2].includes(li))li=0;
+const LC=['kk','ru','en'],LN=['қазақ тілінде','на русском языке','in English'];
+const F=x=>String(x).replace('.',li===2?'.':',');
+/* ================= ТІЛДЕР / ЯЗЫКИ / LANGUAGES ================= */
+const T={
+tb_print:[`🖨 Басып шығару`,`🖨 Печать`,`🖨 Print`],
+tb_pdf:[`📄 PDF`,`📄 PDF`,`📄 PDF`],
+tb_pdfh:[`Принтер терезесінде «PDF ретінде сақтау» таңдаңыз.`,`В окне печати выберите «Сохранить как PDF».`,`In the print window choose “Save as PDF”.`],
+tb_dark:[`Түнгі режим`,`Ночной режим`,`Dark mode`],tb_light:[`Күндізгі режим`,`Дневной режим`,`Light mode`],
+tb_sen:[`♿ ЕҚБ`,`♿ ОВЗ`,`♿ SEN`],
+tb_sent:[`Ерекше қажеттілігі бар балаларға арналған жеңілдетілген бет`,`Упрощённая страница для детей с особыми образовательными потребностями (ОВЗ)`,`Simplified page for children with special educational needs`],
+doc_t:[`№6 зертханалық жұмыс · Өткізгіштерді параллель қосу`,`Лабораторная работа №6 · Параллельное соединение проводников`,`Lab work No. 6 · Parallel connection of conductors`],
+n0:[`Оқушы`,`Ученик`,`Student`],n1:[`Жоспар`,`План`,`Plan`],n2:[`Құралдар`,`Приборы`,`Equipment`],n3:[`Қауіпсіздік`,`Безопасность`,`Safety`],n4:[`Теория`,`Теория`,`Theory`],n5:[`Бөлік құны`,`Цена деления`,`Scale division`],n6:[`Виртуалды зертхана`,`Виртуальная лаборатория`,`Virtual lab`],n7:[`Кесте`,`Таблица`,`Table`],n8:[`График`,`График`,`Graph`],n9:[`Өмірде`,`В жизни`,`Real life`],n10:[`Тест`,`Тест`,`Quiz`],n11:[`Өзін-өзі бағалау`,`Самооценка`,`Self-assessment`],
+st_name:[`Аты-жөні`,`Фамилия, имя`,`Full name`],st_class:[`Сынып`,`Класс`,`Class`],st_date:[`Күні`,`Дата`,`Date`],
+hero_t1:[`8-сынып · Физика`,`8 класс · Физика`,`Grade 8 · Physics`],hero_t2:[`№6 зертханалық жұмыс`,`Лабораторная работа №6`,`Lab work No. 6`],
+hero_h:[`Өткізгіштерді <em>параллель</em> қосуды зерделеу`,`Изучение <em>параллельного</em> соединения проводников`,`Studying the <em>parallel</em> connection of conductors`],
+hero_p:[`Виртуалды зертханада тізбекті өзің құрастыр, құралдармен өлше, кесте толтырып, график сыз. Барсик мысық сені әр қадамда қолдайды! 🐱`,`В виртуальной лаборатории собери цепь сам, измерь приборами, заполни таблицу и построй график. Кот Барсик поддержит тебя на каждом шаге! 🐱`,`In the virtual lab build the circuit yourself, measure with the instruments, fill in the table and draw a graph. Barsik the cat helps you at every step! 🐱`],
+hero_btn:[`🔬 Зертханаға бару`,`🔬 В лабораторию`,`🔬 Go to the lab`],
+/* ЕҚБ */
+sen_t:[`🧒 Бүгін не істейміз?`,`🧒 Что мы сегодня делаем?`,`🧒 What are we doing today?`],
+sen_intro:[`Екі резисторды <b>қатар</b> (параллель) қосамыз. Ток пен кернеуді өлшейміз.`,`Мы соединим два резистора <b>рядом</b> (параллельно). Измерим ток и напряжение.`,`We connect two resistors <b>side by side</b> (in parallel). We measure the current and the voltage.`],
+sen_s1:[`🧰 Құралдарды партаға қой`,`🧰 Положи приборы на парту`,`🧰 Put the devices on the desk`],
+sen_s2:[`🔌 Құралдарды сымдармен жалғау`,`🔌 Соедини приборы проводами`,`🔌 Connect the devices with wires`],
+sen_s3:[`✅ «Тізбекті тексеру» батырмасын бас`,`✅ Нажми «Проверить цепь»`,`✅ Press “Check the circuit”`],
+sen_s4:[`👀 Кілтті қос, құралдың көрсетуін оқы`,`👀 Включи ключ, прочитай показания приборов`,`👀 Turn the key on, read the meters`],
+sen_s5:[`✍️ Сандарды кестеге жаз`,`✍️ Запиши числа в таблицу`,`✍️ Write the numbers in the table`],
+sen_w:[`<b>Есіңде болсын:</b><br>🔹 Параллель = қатар.<br>🔹 Амперметр токты өлшейді. Ол тізбекке <b>тізбектей</b> қосылады.<br>🔹 Вольтметр кернеуді өлшейді. Ол резисторға <b>параллель</b> қосылады.`,`<b>Запомни:</b><br>🔹 Параллельно = рядом.<br>🔹 Амперметр измеряет ток. Он включается <b>последовательно</b>.<br>🔹 Вольтметр измеряет напряжение. Он включается <b>параллельно</b> резистору.`,`<b>Remember:</b><br>🔹 Parallel = side by side.<br>🔹 The ammeter measures current. It is connected <b>in series</b>.<br>🔹 The voltmeter measures voltage. It is connected <b>in parallel</b> with the resistor.`],
+sen_listen:[`🔊 Оқып беру`,`🔊 Прочитать вслух`,`🔊 Read aloud`],
+sen_th_t:[`🧒 Қарапайым түрде`,`🧒 Простыми словами`,`🧒 In simple words`],
+sen_th:[`🔹 Кернеу бірдей: U = U₁ = U₂.<br>🔹 Токтар қосылады: I = I₁ + I₂.<br>🔹 Жалпы кедергі аз болады: R кіші R₁ және R₂.`,`🔹 Напряжение одинаковое: U = U₁ = U₂.<br>🔹 Токи складываются: I = I₁ + I₂.<br>🔹 Общее сопротивление меньше: R меньше R₁ и R₂.`,`🔹 The voltage is the same: U = U₁ = U₂.<br>🔹 The currents add up: I = I₁ + I₂.<br>🔹 The total resistance is smaller: R is less than R₁ and R₂.`],
+sen_schem_btn:[`💡 Дайын сызбаны көрсет`,`💡 Показать готовую схему`,`💡 Show the ready scheme`],
+sen_schem_t:[`Дұрыс тізбек сызбасы: К – кілт, A – амперметр (тізбектей), R₁ және R₂ – параллель, V – вольтметр (параллель).`,`Схема правильной цепи: К – ключ, A – амперметр (последовательно), R₁ и R₂ – параллельно, V – вольтметр (параллельно).`,`Scheme of the correct circuit: K – key, A – ammeter (in series), R₁ and R₂ – in parallel, V – voltmeter (in parallel).`],
+/* 1 */
+s1_h2:[`Жұмыс туралы`,`О работе`,`About the work`],
+s1_q:[`<h4>❓ Зерттеу сұрағы</h4>Өткізгіштерді параллель жалғаған кезде тізбектегі жалпы ток күші, кернеу және жалпы кедергі қалай өзгереді?`,`<h4>❓ Исследовательский вопрос</h4>Как изменяются общая сила тока, напряжение и общее сопротивление цепи при параллельном соединении проводников?`,`<h4>❓ Research question</h4>How do the total current, the voltage and the total resistance of a circuit change when conductors are connected in parallel?`],
+s1_g:[`<h4>🎯 Мақсат</h4>Өткізгіштерді параллель жалғау заңдылықтарын тәжірибе жүзінде анықтау және электр шамаларын өлшеу арқылы тексеру.`,`<h4>🎯 Цель</h4>Опытным путём установить закономерности параллельного соединения проводников и проверить их измерением электрических величин.`,`<h4>🎯 Aim</h4>To find the laws of the parallel connection of conductors by experiment and to check them by measuring electrical quantities.`],
+s1_o:[`<h4>📚 Оқу мақсаттары</h4><ul><li><b>8.4.2.10</b> – параллель жалғау заңдылықтарын эксперимент арқылы анықтау;</li><li><b>8.1.3.3</b> – физика кабинетінде қауіпсіздік ережелерін білу және сақтау.</li></ul>`,`<h4>📚 Цели обучения</h4><ul><li><b>8.4.2.10</b> – устанавливать закономерности параллельного соединения экспериментально;</li><li><b>8.1.3.3</b> – знать и соблюдать правила безопасности в кабинете физики.</li></ul>`,`<h4>📚 Learning objectives</h4><ul><li><b>8.4.2.10</b> – find the laws of the parallel connection by experiment;</li><li><b>8.1.3.3</b> – know and follow safety rules in the physics classroom.</li></ul>`],
+s1_t:[`<h4>✅ Міндеттер</h4><ol><li>Параллель жалғау арқылы электр тізбегін құрастыру.</li><li>Әр тармақтағы ток күші мен кернеуді өлшеп, байланысын анықтау.</li><li>Жалпы кедергіні есептеп, заңдылықтарды дәлелдеу.</li></ol>`,`<h4>✅ Задачи</h4><ol><li>Собрать электрическую цепь с параллельным соединением.</li><li>Измерить силу тока и напряжение в каждой ветви и найти связь между ними.</li><li>Вычислить общее сопротивление и доказать закономерности.</li></ol>`,`<h4>✅ Tasks</h4><ol><li>Build an electric circuit with a parallel connection.</li><li>Measure the current and the voltage in each branch and find the relation.</li><li>Calculate the total resistance and prove the laws.</li></ol>`],
+s1_h:[`<h4>💡 Гипотеза</h4>Егер өткізгіштерді параллель жалғасақ, әр өткізгіштің ұштарындағы кернеу бірдей, жалпы ток күші тармақтардағы ток күштерінің қосындысына тең болады. Жалпы кедергі жеке өткізгіштердің кедергілерінен аз болады.`,`<h4>💡 Гипотеза</h4>Если соединить проводники параллельно, то напряжение на концах каждого одинаково, общая сила тока равна сумме токов в ветвях, а общее сопротивление меньше сопротивления каждого проводника.`,`<h4>💡 Hypothesis</h4>If conductors are connected in parallel, the voltage across each one is the same, the total current equals the sum of the branch currents, and the total resistance is smaller than any single resistance.`],
+s1_v:[`<h4>🔀 Айнымалылар</h4><b>Тәуелсіз:</b> параллель жалғанған өткізгіштер саны.<br><b>Тәуелді:</b> жалпы ток күші және жалпы кедергі.<br><b>Тұрақты:</b> ток көзінің кернеуі, материал, температура, әр өткізгіштің кедергісі.`,`<h4>🔀 Переменные</h4><b>Независимая:</b> число параллельно соединённых проводников.<br><b>Зависимая:</b> общая сила тока и общее сопротивление.<br><b>Постоянные:</b> напряжение источника, материал, температура, сопротивление каждого проводника.`,`<h4>🔀 Variables</h4><b>Independent:</b> number of conductors connected in parallel.<br><b>Dependent:</b> total current and total resistance.<br><b>Controlled:</b> source voltage, material, temperature, resistance of each conductor.`],
+/* 2 */
+s2_h2:[`Құрал-жабдықтар · шынайы зертхана қалай көрінеді?`,`Оборудование · как выглядит настоящая лаборатория?`,`Equipment · what a real lab looks like`],
+s2_hint:[`📷 Шынайы фотоларды <code>photos/</code> қалтасына (<code>source.jpg, resistor.jpg, lamp.jpg, ammeter.jpg, voltmeter.jpg, key.jpg, wires.jpg, rheostat.jpg</code>) салсаң, осы жерде көрінеді. Фото жоқ болса – сызба көрсетіледі.`,`📷 Если положить реальные фото в папку <code>photos/</code> (<code>source.jpg, resistor.jpg, lamp.jpg, ammeter.jpg, voltmeter.jpg, key.jpg, wires.jpg, rheostat.jpg</code>), они появятся здесь. Если фото нет – показывается схема.`,`📷 Put real photos in the <code>photos/</code> folder (<code>source.jpg, resistor.jpg, lamp.jpg, ammeter.jpg, voltmeter.jpg, key.jpg, wires.jpg, rheostat.jpg</code>) and they appear here. Without photos a drawing is shown.`],
+real_photo:[`🔎 Шынайы фото`,`🔎 Реальное фото`,`🔎 Real photo`],
+eq_source_t:[`Тұрақты ток көзі`,`Источник постоянного тока`,`DC power supply`],eq_source_d:[`Электр тогын жасайды. Кернеуі мен полюстері (+ қызыл, − қара) белгіленген. Мұғалімнің рұқсатынсыз қоспа!`,`Создаёт электрический ток. Указаны напряжение и полюса (+ красный, − чёрный). Не включай без разрешения учителя!`,`Produces electric current. Voltage and poles (+ red, − black) are marked. Never switch on without the teacher's permission!`],
+eq_resistor_t:[`Резистор`,`Резистор`,`Resistor`],eq_resistor_d:[`Белгілі кедергісі бар өткізгіш (Ом). Түсті жолақтар кедергі мәнін көрсетеді. Тәжірибеде екі резистор алынады.`,`Проводник с известным сопротивлением (Ом). Цветные полоски показывают значение. В опыте берут два резистора.`,`A conductor with a known resistance (Ω). Colour bands show its value. Two resistors are used in the experiment.`],
+eq_lamp_t:[`Электр шамы`,`Электрическая лампа`,`Electric bulb`],eq_lamp_d:[`Кедергісі бар жарық беретін өткізгіш; резистордың орнына алынады. Ток өткенде қызады.`,`Проводник, дающий свет; можно взять вместо резистора. При токе нагревается.`,`A conductor that gives light; can be used instead of a resistor. It heats up when current flows.`],
+eq_ammeter_t:[`Амперметр`,`Амперметр`,`Ammeter`],eq_ammeter_d:[`Ток күшін (А) өлшейді. Тізбекке ТІЗБЕКТЕЙ жалғанады. Алдымен бөлік құнын анықта!`,`Измеряет силу тока (А). Включается в цепь ПОСЛЕДОВАТЕЛЬНО. Сначала определи цену деления!`,`Measures current (A). Connected IN SERIES. First find the scale division!`],
+eq_voltmeter_t:[`Вольтметр`,`Вольтметр`,`Voltmeter`],eq_voltmeter_d:[`Кернеуді (В) өлшейді. Өлшенетін өткізгішке ПАРАЛЛЕЛЬ жалғанады.`,`Измеряет напряжение (В). Подключается ПАРАЛЛЕЛЬНО измеряемому проводнику.`,`Measures voltage (V). Connected IN PARALLEL with the conductor measured.`],
+eq_key_t:[`Кілт (қосқыш)`,`Ключ (выключатель)`,`Key (switch)`],eq_key_d:[`Тізбекті қосып-өшіреді. Тізбекті құрастырған кезде кілт ашық болуы керек.`,`Замыкает и размыкает цепь. При сборке цепи ключ должен быть разомкнут.`,`Opens and closes the circuit. While building the circuit the key must be open.`],
+eq_wires_t:[`Жалғағыш сымдар`,`Соединительные провода`,`Connecting wires`],eq_wires_d:[`Құралдарды байланыстырады. Оқшаулағыш қабатының зақымдалмағанын тексер.`,`Соединяют приборы. Проверь, что изоляция не повреждена.`,`Connect the devices. Check that the insulation is not damaged.`],
+eq_rheostat_t:[`Реостат`,`Реостат`,`Rheostat`],eq_rheostat_d:[`Кедергіні өзгертіп, ток күшін реттейді (қажет болғанда ғана).`,`Меняет сопротивление и регулирует силу тока (при необходимости).`,`Changes resistance and regulates current (only when needed).`],
+/* 3 */
+s3_h2:[`Қауіпсіздік ережелері`,`Правила безопасности`,`Safety rules`],
+s3_l:[`<ol><li>Тізбекті құрастыру алдында ток көзін ажырат.</li><li>Тізбекті тек мұғалімнің рұқсатымен қос.</li><li>Кернеу рұқсат етілген мәннен аспасын.</li><li>Амперметр – <b>тізбектей</b>, вольтметр – <b>параллель</b>.</li><li>Жалаңаш сымға және ток көзіне дымқыл қолмен тиме.</li><li>Сымдардың оқшаулағышы зақымданбағанын тексер.</li><li>Тәжірибе соңында ток көзін міндетті түрде ажырат.</li></ol>`,`<ol><li>Перед сборкой цепи отключи источник тока.</li><li>Включай цепь только с разрешения учителя.</li><li>Напряжение не должно превышать допустимое.</li><li>Амперметр – <b>последовательно</b>, вольтметр – <b>параллельно</b>.</li><li>Не касайся голых проводов и источника мокрыми руками.</li><li>Проверь, что изоляция проводов не повреждена.</li><li>В конце опыта обязательно отключи источник тока.</li></ol>`,`<ol><li>Disconnect the power source before building the circuit.</li><li>Switch on the circuit only with the teacher's permission.</li><li>The voltage must not exceed the allowed value.</li><li>Ammeter – <b>in series</b>, voltmeter – <b>in parallel</b>.</li><li>Do not touch bare wires or the source with wet hands.</li><li>Check that the wire insulation is not damaged.</li><li>At the end of the experiment always disconnect the source.</li></ol>`],
+s3_w:[`<h4>⚠️ Есіңде болсын</h4>Амперметрді тізбекке <b>параллель</b> қоссаң – қысқа тұйықталу болады: құрал күйіп кетеді! Виртуалды зертханада да осы қатені тексереміз.`,`<h4>⚠️ Запомни</h4>Если включить амперметр <b>параллельно</b> – будет короткое замыкание: прибор сгорит! В виртуальной лаборатории мы тоже проверяем эту ошибку.`,`<h4>⚠️ Remember</h4>If you connect an ammeter <b>in parallel</b> it causes a short circuit and the device burns out! The virtual lab checks this mistake too.`],
+/* 4 */
+s4_h2:[`Қысқаша теория`,`Краткая теория`,`Short theory`],
+s4_p:[`Параллель жалғауда өткізгіштердің басы бір түйінге, соңы екінші түйінге жалғанады, ток бірнеше тармаққа бөлінеді.`,`При параллельном соединении начала проводников присоединяют к одному узлу, а концы – к другому; ток разделяется на несколько ветвей.`,`In a parallel connection the beginnings of the conductors are joined to one node and the ends to another node; the current splits into several branches.`],
+s4_n:[`Параллель жалғауда жалпы кедергі әрбір жеке өткізгіштің кедергісінен <b>аз</b> болады.`,`При параллельном соединении общее сопротивление <b>меньше</b> сопротивления каждого отдельного проводника.`,`In a parallel connection the total resistance is <b>smaller</b> than the resistance of every single conductor.`],
+/* 5 */
+s5_h2:[`Зертханаға дейін: құралдың бөлік құнын анықта`,`Перед лабораторной: определи цену деления прибора`,`Before the lab: find the scale division`],
+s5_p:[`Өлшеу алдында шкаланың <b>бөлік құнын</b> білу керек: <b>c = (көрші екі сан арасындағы айырма) ÷ (араларындағы бөліктер саны)</b>. Төмендегі құралдарды оқы:`,`Перед измерением нужно знать <b>цену деления</b> шкалы: <b>c = (разность соседних чисел) ÷ (число делений между ними)</b>. Прочитай приборы ниже:`,`Before measuring you must know the <b>scale division value</b>: <b>c = (difference between two neighbouring numbers) ÷ (number of divisions between them)</b>. Read the meters below:`],
+dv_t1:[`🎮 1-тапсырма`,`🎮 Задание 1`,`🎮 Task 1`],dv_t2:[`🎮 2-тапсырма`,`🎮 Задание 2`,`🎮 Task 2`],
+dv_this:[`Бұл –`,`Это –`,`This is an`],dv_where:[`Көрсеткіш қайда тұр?`,`Где стоит стрелка?`,`Where is the pointer?`],
+nm_amm:[`амперметр`,`амперметр`,`ammeter`],nm_vol:[`вольтметр`,`вольтметр`,`voltmeter`],nm_src:[`ток көзі`,`источник тока`,`power source`],nm_key:[`кілт`,`ключ`,`key`],nm_r1:[`R₁`,`R₁`,`R₁`],nm_r2:[`R₂`,`R₂`,`R₂`],
+dv_q1:[`Бөлік құны c =`,`Цена деления c =`,`Division value c =`],dv_q2:[`Құралдың көрсетуі =`,`Показание прибора =`,`Meter reading =`],dv_q3:[`Өлшеу қателігі (c/2) =`,`Погрешность измерения (c/2) =`,`Measurement error (c/2) =`],
+dv_chk:[`✅ Тексеру`,`✅ Проверить`,`✅ Check`],dv_new:[`🔄 Жаңа құрал`,`🔄 Новый прибор`,`🔄 New meter`],
+dv_fb:[(a,b,c,m,s)=>`Бөлік құны: ${a?'дұрыс':'қате – '+m+' ÷ '+s+' есепте'}; көрсету: ${b?'дұрыс':'қате – көрсеткіш неше бөлікте тұрғанын санап, c-ге көбейт'}; қателік: ${c?'дұрыс':'қате – c-ны екіге бөл'}.`,(a,b,c,m,s)=>`Цена деления: ${a?'верно':'ошибка – вычисли '+m+' ÷ '+s}; показание: ${b?'верно':'ошибка – посчитай, на каком делении стрелка, и умножь на c'}; погрешность: ${c?'верно':'ошибка – раздели c на два'}.`,(a,b,c,m,s)=>`Division value: ${a?'correct':'wrong – calculate '+m+' ÷ '+s}; reading: ${b?'correct':'wrong – count the divisions up to the pointer and multiply by c'}; error: ${c?'correct':'wrong – divide c by two'}.`],
+/* LAB */
+lab_h2:[`Виртуалды зертхана: тізбекті өзің құрастыр`,`Виртуальная лаборатория: собери цепь сам`,`Virtual lab: build the circuit yourself`],
+lab_how:[`<b>Қалай жұмыс істейді?</b><br>1) Құралдарды жоғарғы <u>сөрeден</u> басып ұстап, төмендегі <u>партаға</u> сүйреп әкел. Партадағы құралды қалаған жеріңе жылжыта аласың; сөреге қайтарса – алынып тасталады.<br>2) Бір құралдың ұшын (⭕ клемма) бас, содан кейін екінші құралдың клеммасын бас – сым пайда болады. Сымды өшіру үшін оны бас.<br><b>Тапсырма:</b> ток көзі, кілт, амперметр (жалпы тізбекке <u>тізбектей</u>), екі резистор (<u>параллель</u>) және вольтметр (резисторларға <u>параллель</u>) жалғап, <b>«Тізбекті тексеру»</b> батырмасын бас.`,`<b>Как это работает?</b><br>1) Нажми на прибор на верхней <u>полке</u> и перетащи его на <u>парту</u> внизу. Прибор на парте можно двигать; если вернуть на полку – он убирается.<br>2) Нажми на контакт (⭕ клемма) одного прибора, затем на клемму другого – появится провод. Чтобы убрать провод, нажми на него.<br><b>Задание:</b> соедини источник тока, ключ, амперметр (<u>последовательно</u> в общую цепь), два резистора (<u>параллельно</u>) и вольтметр (<u>параллельно</u> резисторам) и нажми <b>«Проверить цепь»</b>.`,`<b>How does it work?</b><br>1) Press and hold a device on the upper <u>shelf</u> and drag it onto the <u>desk</u> below. You can move devices on the desk; dragging one back to the shelf removes it.<br>2) Click a terminal (⭕) of one device, then a terminal of another – a wire appears. Click a wire to delete it.<br><b>Task:</b> connect the power source, key, ammeter (<u>in series</u> in the main circuit), two resistors (<u>in parallel</u>) and a voltmeter (<u>in parallel</u> with the resistors), then press <b>“Check the circuit”</b>.`],
+lab_chk:[`✅ Тізбекті тексеру`,`✅ Проверить цепь`,`✅ Check the circuit`],lab_clr:[`🗑 Сымдарды тазалау`,`🗑 Убрать провода`,`🗑 Clear wires`],lab_rst:[`↩ Құралдарды сөреге қайтару`,`↩ Вернуть приборы на полку`,`↩ Put devices back on the shelf`],
+lab_sel:[k=>`Таңдалды: ${k} → екінші клеммаға бас`,k=>`Выбрано: ${k} → нажми на вторую клемму`,k=>`Selected: ${k} → click the second terminal`],
+lab_src:[`ТҰРАҚТЫ ТОК КӨЗІ`,`ИСТОЧНИК ТОКА`,`DC SOURCE`],lab_key:[`КІЛТ`,`КЛЮЧ`,`KEY`],lab_am:[`0 – 2 А · амперметр`,`0 – 2 А · амперметр`,`0 – 2 A · ammeter`],lab_vm:[`0 – 10 В · вольтметр`,`0 – 10 В · вольтметр`,`0 – 10 V · voltmeter`],
+lab_r1:[`Резистор 1`,`Резистор 1`,`Resistor 1`],lab_r2:[`Резистор 2`,`Резистор 2`,`Resistor 2`],lab_desk:[`ПАРТА`,`ПАРТА`,`DESK`],lab_drop:[`⬇ Құралдарды сөреден осы партаға сүйреп әкел`,`⬇ Перетащи приборы с полки на эту парту`,`⬇ Drag the devices from the shelf onto this desk`],
+sh_src:[`Ток көзі`,`Источник тока`,`Power source`],sh_key:[`Кілт`,`Ключ`,`Key`],sh_amm:[`Амперметр`,`Амперметр`,`Ammeter`],sh_vol:[`Вольтметр`,`Вольтметр`,`Voltmeter`],sh_r1:[`Резистор 1`,`Резистор 1`,`Resistor 1`],sh_r2:[`Резистор 2`,`Резистор 2`,`Resistor 2`],
+e_place:[`📦 Барлық 6 құралды сөреден партаға қой.`,`📦 Положи все 6 приборов с полки на парту.`,`📦 Put all 6 devices from the shelf onto the desk.`],
+e_open:[n=>`❗ «${n}» құралының ұшы жалғанбаған. Барлық құрал тізбекке қосылуы керек.`,n=>`❗ Контакт прибора «${n}» не подключён. Все приборы должны быть в цепи.`,n=>`❗ A terminal of the “${n}” is not connected. Every device must be in the circuit.`],
+e_short:[`⚡ Қысқа тұйықталу! Ток көзінің екі полюсі сыммен тікелей жалғанған. Ток көзін дереу ажыратады!`,`⚡ Короткое замыкание! Два полюса источника соединены проводом напрямую. Источник нужно сразу отключить!`,`⚡ Short circuit! The two poles of the source are joined directly by a wire. Disconnect the source at once!`],
+e_amshort:[`❗ Амперметрдің екі ұшы бір түйінде – құрал тізбекке жұмыс істемейді (қысқа тұйықталған).`,`❗ Оба контакта амперметра в одном узле – прибор в цепи не работает (замкнут накоротко).`,`❗ Both terminals of the ammeter are on one node – it does not work (short-circuited).`],
+e_rshort:[`❗ Резистордың екі ұшы бір түйінде – резистор қысқа тұйықталған.`,`❗ Оба контакта резистора в одном узле – резистор замкнут накоротко.`,`❗ Both terminals of a resistor are on one node – the resistor is short-circuited.`],
+e_notpar:[`❗ Резисторлар параллель емес: олардың екі ұшы да сәйкес екі түйінге жалғануы керек (екеуінің «басы» бір түйінде, «соңы» екінші түйінде).`,`❗ Резисторы не параллельны: их концы должны быть присоединены к двум общим узлам («начала» в одном узле, «концы» в другом).`,`❗ The resistors are not in parallel: their ends must go to two common nodes (both “beginnings” on one node, both “ends” on the other).`],
+e_vol:[`❗ Вольтметр өткізгіштерге параллель жалғанбаған. Оның ұштарын резисторлардың ортақ түйіндеріне қос.`,`❗ Вольтметр не подключён параллельно проводникам. Присоедини его к общим узлам резисторов.`,`❗ The voltmeter is not in parallel with the conductors. Connect it to the common nodes of the resistors.`],
+e_main:[`❗ Негізгі тізбек дұрыс емес: ток көзі, кілт, амперметр және резисторлар блогы бір тұйық контурда бірінен соң бірі (тізбектей) жалғануы керек. Амперметр резисторларға параллель болмауы тиіс.`,`❗ Основная цепь неверна: источник, ключ, амперметр и блок резисторов должны идти друг за другом (последовательно) в одном замкнутом контуре. Амперметр не должен быть параллелен резисторам.`,`❗ The main circuit is wrong: the source, key, ammeter and resistor block must follow each other (in series) in one closed loop. The ammeter must not be parallel to the resistors.`],
+lab_ok:[`Тізбек дұрыс құрастырылған! Енді кілтті қосып өлше.`,`Цепь собрана правильно! Теперь включи ключ и измеряй.`,`The circuit is correct! Now turn the key on and measure.`],
+meas_h:[`📏 Өлшеу`,`📏 Измерение`,`📏 Measuring`],meas_am:[`Амперметр орны:`,`Где амперметр:`,`Ammeter position:`],
+meas_p0:[`Негізгі тізбек`,`Общая цепь`,`Main circuit`],meas_p1:[`1-тармақ (R₁)`,`Ветвь 1 (R₁)`,`Branch 1 (R₁)`],meas_p2:[`2-тармақ (R₂)`,`Ветвь 2 (R₂)`,`Branch 2 (R₂)`],
+key_on:[`🔌 Кілтті қосу`,`🔌 Включить ключ`,`🔌 Turn the key on`],key_off:[`🔌 Кілтті өшіру`,`🔌 Выключить ключ`,`🔌 Turn the key off`],
+meas_hint:[`Құралдардың көрсетуін өзің оқы (бөлік құнын ұмытпа!) және төмендегі кестеге жаз. Ток көзінің кернеуі:`,`Прочитай показания приборов сам (не забудь цену деления!) и запиши в таблицу ниже. Напряжение источника:`,`Read the meters yourself (do not forget the division value!) and write the values in the table below. Source voltage:`],
+u_V:[`В`,`В`,`V`],u_A:[`А`,`А`,`A`],u_Om:[`Ом`,`Ом`,`Ω`],u_W:[`Вт`,`Вт`,`W`],
+/* 7 */
+s7_h2:[`Нәтижелерді тіркеу кестесі`,`Таблица результатов`,`Results table`],
+s7_p:[`Өлшеген мәндерді жаз, содан кейін есептеп шығар: I = I₁ + I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I.`,`Запиши измеренные значения, затем вычисли: I = I₁ + I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I.`,`Write the measured values, then calculate: I = I₁ + I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I.`],
+h_u:[`U, В`,`U, В`,`U, V`],h_i1:[`I₁, А`,`I₁, А`,`I₁, A`],h_i2:[`I₂, А`,`I₂, А`,`I₂, A`],h_i:[`I (өлшенген), А`,`I (измеренная), А`,`I (measured), A`],h_is:[`I₁+I₂, А`,`I₁+I₂, А`,`I₁+I₂, A`],h_r1:[`R₁, Ом`,`R₁, Ом`,`R₁, Ω`],h_r2:[`R₂, Ом`,`R₂, Ом`,`R₂, Ω`],h_r:[`R, Ом`,`R, Ом`,`R, Ω`],h_isum:[`I = I₁+I₂, А`,`I = I₁+I₂, А`,`I = I₁+I₂, A`],
+t_chk:[`✅ Кестені тексеру`,`✅ Проверить таблицу`,`✅ Check the table`],
+tb_ok:[`Барлық мән дұрыс! R екі резистордың кез келгенінен аз екенін байқадың ба?`,`Все значения верны! Заметил, что R меньше любого из двух резисторов?`,`All values are correct! Did you notice that R is smaller than either resistor?`],
+tb_bad:[b=>`Мына бағандарды қайта тексер: ${b}. Өлшеуді қайталап, R = U/I формуласын қолдан.`,b=>`Перепроверь эти столбцы: ${b}. Повтори измерение и используй R = U/I.`,b=>`Re-check these columns: ${b}. Repeat the measurement and use R = U/I.`],
+s7_ch:[`🧠 Қорытынды`,`🧠 Вывод`,`🧠 Conclusion`],s7_cp:[`R-ді R₁ және R₂-мен салыстыр. Гипотеза расталды ма? Өз сөзіңмен жаз:`,`Сравни R с R₁ и R₂. Подтвердилась ли гипотеза? Напиши своими словами:`,`Compare R with R₁ and R₂. Was the hypothesis confirmed? Write in your own words:`],
+c_chk:[`✅ Қорытындыны тексеру`,`✅ Проверить вывод`,`✅ Check the conclusion`],
+c_ok:[`Қорытынды толық: кернеу, ток және кедергі туралы айтылған.`,`Вывод полный: сказано о напряжении, токе и сопротивлении.`,`The conclusion is complete: voltage, current and resistance are covered.`],
+c_bad:[`Қорытындыда үш шаманы да (кернеу, ток күші, кедергі) және олардың қалай өзгеретінін жаз.`,`В выводе напиши все три величины (напряжение, сила тока, сопротивление) и как они изменяются.`,`In the conclusion write about all three quantities (voltage, current, resistance) and how they change.`],
+/* 8 */
+s8_h2:[`График сыз: I(U) тәуелділігі`,`Построй график: зависимость I(U)`,`Draw a graph: I(U) dependence`],
+s8_p:[`Сенің тізбегіңде ток көзі өзгерсе, әр тармақтағы ток <b>I = U/R</b> заңымен өзгереді. Кестені толтыр (I = I₁+I₂), содан кейін <b>нүктелерді</b> тордың ішін басып қой: алдымен серияны таңда (I₁, I₂ немесе I).`,`Если в твоей цепи менять напряжение источника, ток в каждой ветви меняется по закону <b>I = U/R</b>. Заполни таблицу (I = I₁+I₂), затем ставь <b>точки</b> кликом по сетке: сначала выбери серию (I₁, I₂ или I).`,`If the source voltage in your circuit changes, the current in each branch changes by <b>I = U/R</b>. Fill in the table (I = I₁+I₂), then place <b>points</b> by clicking in the grid: first choose a series (I₁, I₂ or I).`],
+gr_series:[`Серия:`,`Серия:`,`Series:`],g_chk:[`✅ Графикті тексеру`,`✅ Проверить график`,`✅ Check the graph`],g_clr:[`🗑 Тазалау`,`🗑 Очистить`,`🗑 Clear`],g_hint:[`Бар нүктені қайта бассаң – өшеді.`,`Повторный клик по точке удаляет её.`,`Click an existing point again to remove it.`],
+g_pts:[(n,k,e)=>`${n}: ${k}/5 нүкте дұрыс${e>0?', '+e+' артық/қате':''}`,(n,k,e)=>`${n}: ${k}/5 точек верно${e>0?', '+e+' лишних/ошибочных':''}`,(n,k,e)=>`${n}: ${k}/5 points correct${e>0?', '+e+' extra/wrong':''}`],
+g_sum:[`кестедегі I = I₁+I₂ мәндері қате`,`значения I = I₁+I₂ в таблице неверны`,`the I = I₁+I₂ values in the table are wrong`],
+g_ok:[`График дұрыс: үш түзу де координаталар басынан өтеді, I түзуі ең тік – себебі жалпы кедергі аз.`,`График верный: все три прямые идут из начала координат, прямая I самая крутая – потому что общее сопротивление мало.`,`The graph is correct: all three lines start at the origin and the I line is the steepest – because the total resistance is smallest.`],
+g_bad:[m=>`Мына жерлерді тексер: ${m}. Әр нүкте үшін I = U/R есепте.`,m=>`Проверь: ${m}. Для каждой точки вычисли I = U/R.`,m=>`Check: ${m}. Calculate I = U/R for every point.`],
+/* 9 */
+s9_h2:[`Өмірмен байланыс: үйдегі электр желісі`,`Связь с жизнью: электросеть дома`,`Real life: the electric network at home`],
+s9_p:[`Үйдегі розеткалардағы барлық құрал бір-біріне <b>параллель</b> қосылған, кернеу – 220 В. Төмендегі виртуалды үйде екі қосылуды салыстыр: <b>шамды басып</b> оны күйдір, не болатынын бақыла!`,`Все приборы в розетках дома подключены <b>параллельно</b>, напряжение – 220 В. В виртуальном доме ниже сравни два способа соединения: <b>нажми на лампу</b>, чтобы она перегорела, и наблюдай!`,`All appliances plugged into home sockets are connected <b>in parallel</b>, 220 V. In the virtual house below compare two connections: <b>click a bulb</b> to burn it out and watch what happens!`],
+sim_par:[`⚡ Параллель (үйдегідей)`,`⚡ Параллельно (как дома)`,`⚡ Parallel (like at home)`],sim_ser:[`➰ Тізбектей`,`➰ Последовательно`,`➰ In series`],sim_rep:[`🔧 Шамдарды ауыстыру`,`🔧 Заменить лампы`,`🔧 Replace the bulbs`],
+sim_panel:[`ЖЕЛІ`,`СЕТЬ`,`MAINS`],sim_b:[`Шам`,`Лампа`,`Bulb`],sim_hint:[`👆 Шамды бас – ол күйіп кетеді.`,`👆 Нажми на лампу – она перегорит.`,`👆 Click a bulb – it burns out.`],
+sim_I:[`Жалпы ток:`,`Общий ток:`,`Total current:`],sim_U:[`Әр жанып тұрған шамдағы кернеу:`,`Напряжение на горящей лампе:`,`Voltage on a lit bulb:`],
+sim_s1:[`Барлық шам толық жарқырайды. Әрқайсысына 220 В түседі.`,`Все лампы горят полным накалом. На каждую приходится 220 В.`,`All bulbs shine fully. Each gets 220 V.`],
+sim_s2:[`Бір шам күйді, бірақ қалғандары жануын жалғастырады – тармақтар бір-біріне тәуелсіз!`,`Одна лампа перегорела, но остальные горят – ветви независимы!`,`One bulb burned out but the others keep shining – the branches are independent!`],
+sim_s3:[`Барлық шам күйді – ток жоқ.`,`Все лампы перегорели – тока нет.`,`All bulbs burned out – no current.`],
+sim_s4:[`Кернеу үш шамға бөлінді (әрқайсысына ≈73 В) – шамдар әлсіз жанады.`,`Напряжение делится между тремя лампами (≈73 В на каждой) – они горят тускло.`,`The voltage is shared by three bulbs (≈73 V each) – they glow dimly.`],
+sim_s5:[`Бір шам күйді – тізбек үзілді, БАРЛЫҒЫ сөнді!`,`Одна лампа перегорела – цепь разорвана, ВСЁ погасло!`,`One bulb burned out – the circuit is broken, EVERYTHING went dark!`],
+l1_h:[`🍵 1-тапсырма (есеп). Асүй`,`🍵 Задание 1 (задача). Кухня`,`🍵 Task 1 (problem). Kitchen`],
+l1_b:[`Электр шәйнек (2200 Вт) және шам (110 Вт) 220 В желіге параллель қосылған. Тармақтарда I = P/U. <b>Жалпы ток күші қанша?</b>`,`Электрочайник (2200 Вт) и лампа (110 Вт) включены параллельно в сеть 220 В. В ветвях I = P/U. <b>Чему равна общая сила тока?</b>`,`An electric kettle (2200 W) and a lamp (110 W) are connected in parallel to a 220 V mains. In each branch I = P/U. <b>What is the total current?</b>`],
+l2_h:[`🚗 2-тапсырма (есеп). Көлік фарасы`,`🚗 Задание 2 (задача). Фары автомобиля`,`🚗 Task 2 (problem). Car headlights`],
+l2_b:[`Көліктің екі бірдей фарасының әрқайсысының кедергісі 6 Ом, олар параллель жалғанған. <b>Жалпы кедергі қанша?</b>`,`Две одинаковые фары автомобиля сопротивлением 6 Ом каждая соединены параллельно. <b>Чему равно общее сопротивление?</b>`,`Two identical car headlights of 6 Ω each are connected in parallel. <b>What is the total resistance?</b>`],
+l2_q:[`Бір фара күйіп кетсе, екіншісі не істейді?`,`Если одна фара перегорит, что будет со второй?`,`If one headlight burns out, what does the other one do?`],
+l2_o0:[`таңда…`,`выбери…`,`choose…`],l2_o1:[`жануын жалғастырады`,`продолжает гореть`,`keeps shining`],l2_o2:[`да сөнеді`,`тоже гаснет`,`goes out too`],
+chk_s:[`Тексеру`,`Проверить`,`Check`],
+l3_h:[`🎮 3-тапсырма (ойын): «Автоматты сақтандырғышты жеңіп көр!»`,`🎮 Задание 3 (игра): «Победи автомат-предохранитель!»`,`🎮 Task 3 (game): “Beat the circuit breaker!”`],
+l3_p:[`Сақтандырғыш <b>16 А</b>-ге есептелген. Құралдарды қосып, жалпы ток күшін <b>14–16 А</b> аралығына жеткіз. 16 А-ден асырсаң, автомат сөнеді! Әр құрал 220 В желіге параллель.`,`Предохранитель рассчитан на <b>16 А</b>. Включай приборы и доведи общий ток до <b>14–16 А</b>. Если превысишь 16 А – автомат выключится! Каждый прибор подключён параллельно к сети 220 В.`,`The breaker is rated for <b>16 A</b>. Switch on appliances and bring the total current to <b>14–16 A</b>. If you exceed 16 A the breaker trips! Each appliance is connected in parallel to 220 V.`],
+l_trip:[`⚡ Автомат сөнді! Ток 16 А-ден асты. Қайта бастаймыз…`,`⚡ Автомат выключился! Ток превысил 16 А. Начинаем заново…`,`⚡ The breaker tripped! The current exceeded 16 A. Starting again…`],
+l3_reset:[`Қайта бастау`,`Начать заново`,`Start again`],
+ap0:[`Шәйнек`,`Чайник`,`Kettle`],ap1:[`Үтік`,`Утюг`,`Iron`],ap2:[`Теледидар`,`Телевизор`,`TV`],ap3:[`Микротолқынды пеш`,`Микроволновка`,`Microwave`],ap4:[`Шам`,`Лампа`,`Lamp`],ap5:[`Тоңазытқыш`,`Холодильник`,`Fridge`],
+l4_h:[`✍️ Ойланып көр`,`✍️ Подумай`,`✍️ Think`],l4_q:[`Неге үйдегі құралдарды тізбектей емес, параллель жалғайды? Түсіндір.`,`Почему приборы дома подключают параллельно, а не последовательно? Объясни.`,`Why are home appliances connected in parallel and not in series? Explain.`],
+f_l1:[`Әр тармақ үшін I=P/U есепте (10 А және 0,5 А), содан кейін I=I₁+I₂ қос.`,`Для каждой ветви вычисли I=P/U (10 А и 0,5 А), затем сложи: I=I₁+I₂.`,`For each branch calculate I=P/U (10 A and 0.5 A), then add: I=I₁+I₂.`],
+f_l2:[`Бірдей екі кедергі параллель болса R = R₁/2. Әр тармақ тәуелсіз: бір тармақ үзілсе, екіншісінде ток жүре береді.`,`Для двух одинаковых сопротивлений R = R₁/2. Ветви независимы: если одна оборвалась, ток в другой идёт.`,`For two identical resistances in parallel R = R₁/2. Branches are independent: if one breaks, the other still carries current.`],
+f_l3:[t=>`Қазір ток ${t} А. Токтар қосылады (I=I₁+I₂): тағы құрал қос немесе артығын өшір.`,t=>`Сейчас ток ${t} А. Токи складываются (I=I₁+I₂): добавь прибор или выключи лишний.`,t=>`The current is now ${t} A. Currents add up (I=I₁+I₂): add an appliance or switch one off.`],
+f_l4:[`Кернеуге және бір құрал сөнгенде қалғандарына не болатынына назар аудар.`,`Обрати внимание на напряжение и на то, что происходит с остальными, если один прибор выключен.`,`Think about the voltage and about what happens to the others when one appliance goes off.`],
+/* 10 */
+s10_h2:[`Білімді тексеру тесті`,`Проверочный тест`,`Knowledge quiz`],ts_chk:[`✅ Тестті тексеру`,`✅ Проверить тест`,`✅ Check the quiz`],
+ts_res:[(s,n)=>`Нәтиже: ${s} / ${n}`,(s,n)=>`Результат: ${s} / ${n}`,(s,n)=>`Result: ${s} / ${n}`],
+ts_fb:[(s,n)=>`Нәтиже: ${s}/${n}. Қызыл белгіленген сұрақтарды қайта оқы (4-бөлім).`,(s,n)=>`Результат: ${s}/${n}. Перечитай вопросы, отмеченные красным (раздел 4).`,(s,n)=>`Result: ${s}/${n}. Re-read the questions marked red (section 4).`],
+/* 11 */
+s11_h2:[`Өзін-өзі бағалау`,`Самооценка`,`Self-assessment`],
+sa_1:[`Болжамымды (гипотезамды) тәжірибеге дейін оқып, өз сөзіммен айттым.`,`Я прочитал(а) гипотезу до опыта и сформулировал(а) её своими словами.`,`I read the hypothesis before the experiment and said it in my own words.`],
+sa_2:[`Амперметрді тізбектей, вольтметрді параллель жалғап, тізбекті дұрыс құрастырдым.`,`Я правильно собрал(а) цепь: амперметр последовательно, вольтметр параллельно.`,`I built the circuit correctly: ammeter in series, voltmeter in parallel.`],
+sa_3:[`Құралдардың бөлік құнын анықтап, көрсетулерін дұрыс оқыдым.`,`Я определил(а) цену деления приборов и правильно снял(а) показания.`,`I found the division value of the meters and read them correctly.`],
+sa_4:[`Кестені толтырып, I = I₁ + I₂ және R < R₁, R₂ екенін өз өлшеулерімнен тексердім.`,`Я заполнил(а) таблицу и проверил(а) по своим измерениям, что I = I₁ + I₂ и R < R₁, R₂.`,`I filled in the table and checked from my own measurements that I = I₁ + I₂ and R < R₁, R₂.`],
+sa_5:[`Қауіпсіздік ережелерін сақтап, жұмыс орнымды жинадым.`,`Я соблюдал(а) правила безопасности и убрал(а) рабочее место.`,`I followed the safety rules and tidied my workplace.`],
+sa_cnt:[(n,m)=>`${n} / ${m} тармақ орындалды`,(n,m)=>`${n} / ${m} пунктов выполнено`,(n,m)=>`${n} / ${m} items done`],
+pr_h:[`Өзара тексеру: кері байланыс, ескерту және түзету`,`Взаимопроверка: обратная связь, замечание и исправление`,`Peer review: feedback, remark and correction`],
+pr_1:[`Біз тексерген топ`,`Группа, которую мы проверили`,`The group we checked`],pr_2:[`Басқа топқа берген кері байланысымыз`,`Обратная связь, которую мы дали другой группе`,`The feedback we gave to the other group`],pr_3:[`Бізге берілген ескерту`,`Замечание, данное нам`,`The remark we received`],pr_4:[`Ескертуден кейін енгізген түзетуіміз`,`Исправление, которое мы внесли после замечания`,`The correction we made after the remark`],
+foot:[`№6 зертханалық жұмыс · Физика, 8-сынып · Виртуалды зертхана`,`Лабораторная работа №6 · Физика, 8 класс · Виртуальная лаборатория`,`Lab work No. 6 · Physics, Grade 8 · Virtual lab`],
+/* verify */
+v_ok:[`✅ Дұрыс`,`✅ Верно`,`✅ Correct`],v_bad:[`❌ Қайта қарап көр`,`❌ Попробуй ещё раз`,`❌ Have another look`],v_think:[`🐱 Барсик тексеріп жатыр…`,`🐱 Барсик проверяет…`,`🐱 Barsik is checking…`],
+v_dis:[`🙋 Келіспеймін, өзім жазамын`,`🙋 Не согласен(на), напишу сам(а)`,`🙋 I disagree, I'll explain`],v_disph:[`Неге өз жауабың дұрыс деп ойлайсың? Түсіндір…`,`Почему ты считаешь свой ответ верным? Объясни…`,`Why do you think your answer is right? Explain…`],v_send:[`Жіберу`,`Отправить`,`Send`],
+v_thx:[`📨 Пікірің сақталды – мұғалім қарап шығады. Жарайсың, өз ойыңды қорғай білдің! 💪`,`📨 Твоё мнение сохранено – учитель посмотрит. Молодец, ты умеешь защищать своё мнение! 💪`,`📨 Your opinion is saved – the teacher will read it. Well done for standing up for your idea! 💪`],
+v_un:[` <i>(ЖИ қолжетімсіз – автоматты тексеру көрсетілді)</i>`,` <i>(ИИ недоступен – показана автоматическая проверка)</i>`,` <i>(AI is unavailable – automatic check shown)</i>`],
+/* Barsik */
+b_hi:[`Мяу! Мен Барсикпін 🐾 Сұрағың бар ма?`,`Мяу! Я Барсик 🐾 Есть вопрос?`,`Meow! I'm Barsik 🐾 Any questions?`],
+b_title:[`🐱 Барсик – зертхана көмекшісі`,`🐱 Барсик – помощник лаборатории`,`🐱 Barsik – lab helper`],b_ph:[`Сұрағыңды жаз…`,`Напиши вопрос…`,`Type your question…`],
+b_greet:[`Сәлем! Мен Барсикпін 🐾 Тізбек, формула немесе құрал туралы сұра – бірге шешеміз!`,`Привет! Я Барсик 🐾 Спрашивай про цепь, формулы или приборы – решим вместе!`,`Hi! I'm Barsik 🐾 Ask about the circuit, formulas or devices – we'll solve it together!`],
+b_gear:[`Файлды компьютерден ашқанда ЖИ жұмыс істеуі үшін Anthropic API кілтін енгіз (тек осы браузерде сақталады). Бос қалдырсаң – жергілікті жауаптар қолданылады.`,`Для работы ИИ при открытии файла на компьютере введи ключ Anthropic API (хранится только в этом браузере). Если оставить пустым – будут местные ответы.`,`To use AI when the file is opened from your computer enter an Anthropic API key (stored only in this browser). Leave empty to use built-in answers.`],
+b_div:[`Бөлік құны c = (көрші екі санның айырмасы) ÷ (араларындағы бөліктер саны). Шкаладан екі санды тауып көрші, санап көр! 🐾`,`Цена деления c = (разность двух соседних чисел) ÷ (число делений между ними). Найди на шкале два числа и посчитай! 🐾`,`Division value c = (difference of two neighbouring numbers) ÷ (number of divisions between them). Find two numbers on the scale and count! 🐾`],
+b_am:[`Амперметр ток күшін өлшейді және тізбекке ТІЗБЕКТЕЙ қосылады. Параллель қоссаң – қысқа тұйықталу!`,`Амперметр измеряет силу тока и включается ПОСЛЕДОВАТЕЛЬНО. Включишь параллельно – короткое замыкание!`,`The ammeter measures current and is connected IN SERIES. In parallel it causes a short circuit!`],
+b_vol:[`Вольтметр кернеуді өлшейді, өлшенетін өткізгішке ПАРАЛЛЕЛЬ қосылады.`,`Вольтметр измеряет напряжение и подключается ПАРАЛЛЕЛЬНО измеряемому проводнику.`,`The voltmeter measures voltage and is connected IN PARALLEL with the conductor.`],
+b_res:[`Параллель: 1/R = 1/R₁ + 1/R₂. Екеуі үшін R = R₁R₂/(R₁+R₂). Нәтиже әрдайым ең кіші кедергіден аз болады.`,`Параллельно: 1/R = 1/R₁ + 1/R₂. Для двух R = R₁R₂/(R₁+R₂). Результат всегда меньше самого малого сопротивления.`,`In parallel: 1/R = 1/R₁ + 1/R₂. For two, R = R₁R₂/(R₁+R₂). The result is always smaller than the smallest resistance.`],
+b_cur:[`Параллельде кернеу бірдей: U=U₁=U₂, ал токтар қосылады: I=I₁+I₂. Ом заңы: I=U/R.`,`При параллельном соединении напряжение одинаково: U=U₁=U₂, а токи складываются: I=I₁+I₂. Закон Ома: I=U/R.`,`In parallel the voltage is the same: U=U₁=U₂ and the currents add: I=I₁+I₂. Ohm's law: I=U/R.`],
+b_saf:[`Алдымен ток көзін ажырат, мұғалімнің рұқсатымен қос, дымқыл қолмен тиме!`,`Сначала отключи источник, включай с разрешения учителя, не трогай мокрыми руками!`,`First disconnect the source, switch on only with the teacher's permission, never touch with wet hands!`],
+b_def:[`Мяу! Қазір ЖИ-ге қосыла алмай тұрмын, бірақ формулаларды 4-бөлімнен көр: U=U₁=U₂, I=I₁+I₂. Нақтырақ сұра: кернеу, ток, кедергі, амперметр… 🐾`,`Мяу! Сейчас не могу подключиться к ИИ, но посмотри формулы в разделе 4: U=U₁=U₂, I=I₁+I₂. Спроси точнее: напряжение, ток, сопротивление, амперметр… 🐾`,`Meow! I can't reach the AI right now, but look at the formulas in section 4: U=U₁=U₂, I=I₁+I₂. Ask more precisely: voltage, current, resistance, ammeter… 🐾`]
+};
+/* ===== Мәтіндердің түзетілген (нақты әрі түсінікті) нұсқасы: жоғарыдағы бірдей кілттерді ауыстырады ===== */
+Object.assign(T,{
+lab_how:[`<b>Қалай жұмыс істейді?</b><br>1) Құралды жоғарғы <u>сөреден</u> басып ұстап, төмендегі <u>партаға</u> сүйреп апар. Партадағы құралды қайта жылжытуға болады. Құралды сөреге қайтарсаң, ол партадан алынады.<br>2) Бір құралдың клеммасын (дөңгелек ұшын) бас, содан кейін екінші құралдың клеммасын бас – екеуінің арасында сым пайда болады. Сымды өшіру үшін оны бас.<br><b>Тапсырма:</b> ток көзі, кілт, амперметр және екі резистор бір тұйық тізбек құрсын: ток көзі → кілт → амперметр → резисторлар. Екі резисторды бір-біріне <u>параллель</u> жалғап, вольтметрді де олардың ұштарына <u>параллель</u> қос. Содан кейін <b>«Тізбекті тексеру»</b> батырмасын бас.`,`<b>Как это работает?</b><br>1) Нажми на прибор на верхней <u>полке</u>, удерживай и перетащи его на <u>парту</u> внизу. Прибор на парте можно передвигать. Если вернуть прибор на полку, он уберётся с парты.<br>2) Нажми на клемму (круглый контакт) одного прибора, затем на клемму другого – между ними появится провод. Чтобы убрать провод, нажми на него.<br><b>Задание:</b> источник тока, ключ, амперметр и два резистора должны образовать одну замкнутую цепь: источник → ключ → амперметр → резисторы. Соедини два резистора <u>параллельно</u> друг с другом, а вольтметр тоже подключи <u>параллельно</u> к их концам. Затем нажми <b>«Проверить цепь»</b>.`,`<b>How does it work?</b><br>1) Press and hold a device on the upper <u>shelf</u> and drag it onto the <u>desk</u> below. You can move a device on the desk. If you drag it back to the shelf, it is removed from the desk.<br>2) Click a terminal (round contact) of one device, then a terminal of another – a wire appears between them. Click a wire to delete it.<br><b>Task:</b> the power source, key, ammeter and two resistors must form one closed circuit: source → key → ammeter → resistors. Connect the two resistors <u>in parallel</u> with each other, and connect the voltmeter <u>in parallel</u> across their ends too. Then press <b>“Check the circuit”</b>.`],
+s5_p:[`Өлшеу алдында шкаланың <b>бөлік құнын</b> білу керек. Бөлік құны: <b>c = (көрші екі санның айырмасы) ÷ (олардың арасындағы бөліктер саны)</b>. Төмендегі екі құралдың шкаласына қарап, тапсырманы орында:`,`Перед измерением нужно знать <b>цену деления</b> шкалы. Цена деления: <b>c = (разность двух соседних чисел) ÷ (число делений между ними)</b>. Посмотри на шкалы двух приборов ниже и выполни задание:`,`Before measuring you must know the <b>division value</b> of the scale. Division value: <b>c = (difference between two neighbouring numbers) ÷ (number of divisions between them)</b>. Look at the scales of the two meters below and do the task:`],
+dv_this:[`Құрал түрі:`,`Тип прибора:`,`Type of meter:`],
+dv_where:[`Шкала мен көрсеткішке қарап, үш мәнді тап.`,`Посмотри на шкалу и стрелку и найди три значения.`,`Look at the scale and the pointer and find three values.`],
+e_short:[`⚡ Қысқа тұйықталу! Ток көзінің екі полюсі сыммен тікелей жалғанған. Ток көзін дереу ажырату керек!`,`⚡ Короткое замыкание! Два полюса источника соединены проводом напрямую. Источник нужно сразу отключить!`,`⚡ Short circuit! The two poles of the source are joined directly by a wire. The source must be disconnected at once!`],
+e_amshort:[`❗ Амперметрдің екі клеммасы бір-бірімен тікелей жалғанған (қысқа тұйықталу), сондықтан ол өлшей алмайды.`,`❗ Две клеммы амперметра соединены друг с другом напрямую (короткое замыкание), поэтому он не может измерять.`,`❗ The two terminals of the ammeter are joined directly (short circuit), so it cannot measure.`],
+e_rshort:[`❗ Резистордың екі клеммасы бір-бірімен тікелей жалғанған, ток резистор арқылы емес, сым арқылы өтеді.`,`❗ Две клеммы резистора соединены друг с другом напрямую, и ток идёт по проводу, а не через резистор.`,`❗ The two terminals of a resistor are joined directly, so the current flows through the wire and not through the resistor.`],
+e_notpar:[`❗ Резисторлар параллель жалғанбаған. Екі резистордың бір ұштары ортақ бір түйінге, екінші ұштары ортақ екінші түйінге жалғануы керек.`,`❗ Резисторы соединены не параллельно. Одни концы двух резисторов должны быть присоединены к общему узлу, а другие концы – ко второму общему узлу.`,`❗ The resistors are not connected in parallel. One end of each resistor must go to a common node and the other end of each to a second common node.`],
+e_main:[`❗ Негізгі тізбек дұрыс емес. Ток көзі, кілт, амперметр және резисторлар бір тұйық контурда бірінен соң бірі (тізбектей) жалғануы керек. Амперметрді резисторларға параллель қоспа.`,`❗ Основная цепь собрана неверно. Источник, ключ, амперметр и резисторы должны идти друг за другом (последовательно) в одном замкнутом контуре. Не подключай амперметр параллельно резисторам.`,`❗ The main circuit is wrong. The source, key, ammeter and resistors must follow one another (in series) in one closed loop. Do not connect the ammeter in parallel with the resistors.`],
+s8_p:[`Ток көзінің кернеуін өзгертсең, әр тармақтағы ток I = U/R заңы бойынша өзгереді. Алдымен кестенің соңғы жолын толтыр (I = I₁ + I₂). Содан кейін графиктің торын басып, нүктелерді қой. Әр серияны (I₁, I₂ немесе I) бөлек таңдап сыз.`,`Если менять напряжение источника, ток в каждой ветви меняется по закону I = U/R. Сначала заполни последнюю строку таблицы (I = I₁ + I₂). Затем ставь точки, нажимая на клетки сетки графика. Каждую серию (I₁, I₂ или I) выбирай и строй отдельно.`,`If you change the source voltage, the current in each branch changes by I = U/R. First fill in the last row of the table (I = I₁ + I₂). Then place points by clicking the grid of the graph. Choose and draw each series (I₁, I₂ or I) separately.`],
+s9_p:[`Үйдегі розеткаларға қосылған барлық құрал <b>параллель</b> жалғанған, желі кернеуі – 220 В. Төмендегі виртуалды үйде екі жалғау тәсілін салыстыр. Алдымен «Параллель» немесе «Тізбектей» батырмасын таңда, содан кейін шамды бас – ол күйіп кетеді. Қалған шамдар жанып тұра ма, жоқ па – бақыла!`,`Все приборы, включённые в домашние розетки, соединены <b>параллельно</b>, напряжение сети – 220 В. В виртуальном доме ниже сравни два способа соединения. Сначала выбери «Параллельно» или «Последовательно», затем нажми на лампу – она перегорит. Посмотри, продолжают ли гореть остальные лампы!`,`All appliances plugged into home sockets are connected <b>in parallel</b>, and the mains voltage is 220 V. In the virtual house below compare the two ways of connecting. First choose “In parallel” or “In series”, then click a bulb – it burns out. Watch whether the other bulbs keep shining!`],
+l1_b:[`Электр шәйнек (2200 Вт) және шам (110 Вт) 220 В желіге параллель қосылған. Әр тармақтағы ток күшін I = P/U формуласымен тап, содан кейін оларды қос. <b>Жалпы ток күші қанша?</b>`,`Электрочайник (2200 Вт) и лампа (110 Вт) включены параллельно в сеть 220 В. Найди силу тока в каждой ветви по формуле I = P/U, затем сложи их. <b>Чему равна общая сила тока?</b>`,`An electric kettle (2200 W) and a lamp (110 W) are connected in parallel to a 220 V mains. Find the current in each branch with I = P/U, then add them. <b>What is the total current?</b>`],
+l3_p:[`Автоматты сақтандырғыш ең көбі <b>16 А</b> токқа шыдайды. Құралдарды қосып, жалпы ток күшін <b>14–16 А</b> аралығына жеткіз. Ток 16 А-ден асса, автомат сөніп қалады. Әр құрал 220 В желіге параллель жалғанған.`,`Автоматический предохранитель выдерживает ток не более <b>16 А</b>. Включай приборы и доведи общий ток до <b>14–16 А</b>. Если ток превысит 16 А, автомат отключится. Каждый прибор подключён параллельно к сети 220 В.`,`The circuit breaker can carry at most <b>16 A</b>. Switch on appliances and bring the total current to <b>14–16 A</b>. If the current goes above 16 A, the breaker trips. Each appliance is connected in parallel to the 220 V mains.`],
+b_gear:[`Барсик жасанды интеллектпен жауап беруі үшін Anthropic API кілтін енгіз (кілт тек осы браузерде сақталады). Кілт енгізбесең, Барсик өзінің ішкі жауаптарын береді.`,`Чтобы Барсик отвечал с помощью искусственного интеллекта, введи ключ Anthropic API (ключ хранится только в этом браузере). Без ключа Барсик отвечает встроенными подсказками.`,`To let Barsik answer with artificial intelligence, enter an Anthropic API key (it is stored only in this browser). Without a key Barsik gives built-in answers.`],
+b_offline:[`Мяу! Жасанды интеллектке қосыла алмадым, сондықтан ішкі көмекші ретінде жауап беремін. Мұғалім ⚙️ белгісі арқылы API кілтін енгізсе, жауаптар толығырақ болады 🐾`,`Мяу! Не получилось подключиться к искусственному интеллекту, поэтому отвечаю как встроенный помощник. Если учитель введёт API-ключ через значок ⚙️, ответы станут подробнее 🐾`,`Meow! I could not connect to the AI, so I answer as a built-in helper. If the teacher enters an API key with the ⚙️ icon, my answers become fuller 🐾`],
+bc1:[`Бөлік құны қалай табылады?`,`Как найти цену деления?`,`How do I find the division value?`],
+bc2:[`Тізбекті қалай құраймын?`,`Как собрать цепь?`,`How do I build the circuit?`],
+bc3:[`Жалпы кедергіні қалай есептеймін?`,`Как вычислить общее сопротивление?`,`How do I calculate the total resistance?`],
+bc4:[`Неге үйде параллель қосады?`,`Почему дома соединяют параллельно?`,`Why is it parallel at home?`],
+b_hello:[`Сәлем! Мен Барсикпін 🐾 Тізбек, формула немесе құрал туралы сұра – бірге шешеміз!`,`Привет! Я Барсик 🐾 Спрашивай про цепь, формулы или приборы – решим вместе!`,`Hi! I'm Barsik 🐾 Ask about the circuit, formulas or devices – we'll work it out together!`],
+b_short:[`Қысқа тұйықталу – токтың кедергісі жоқ сым арқылы өтуі. Ток өте үлкен болып, құрал күйіп кетеді. Сондықтан ток көзінің екі полюсін сыммен тікелей жалғама, амперметрді тек тізбектей қос!`,`Короткое замыкание – это когда ток идёт по проводу почти без сопротивления. Ток становится очень большим, и прибор может сгореть. Поэтому не соединяй полюса источника проводом напрямую и включай амперметр только последовательно!`,`A short circuit is when current flows through a wire with almost no resistance. The current becomes huge and a device can burn out. So never join the poles of the source directly, and connect the ammeter only in series!`],
+b_hyp:[`Гипотеза – тәжірибеге дейінгі болжам. Мысалы: «параллель жалғағанда кернеу бірдей, токтар қосылады, жалпы кедергі азаяды». Тәжірибеден кейін өлшеген сандарыңмен осыны тексересің.`,`Гипотеза – это предположение до опыта. Например: «при параллельном соединении напряжение одинаковое, токи складываются, общее сопротивление уменьшается». После опыта ты проверяешь это своими измерениями.`,`A hypothesis is a guess made before the experiment. For example: “in a parallel connection the voltage is the same, the currents add up and the total resistance decreases”. After the experiment you check it with your own measurements.`],
+b_why:[`Үйде құралдарды параллель жалғайды. Себебі: 1) әр құралға бірдей 220 В түседі; 2) бір құрал сөнсе, қалғандары жұмыс істей береді. Виртуалды үйде «Тізбектей» батырмасын басып, шамды күйдіріп көр – не болатынын өзің көресің 🐾`,`Дома приборы соединяют параллельно. Причины: 1) на каждый прибор приходится одинаковые 220 В; 2) если один прибор выключится, остальные продолжают работать. В виртуальном доме выбери «Последовательно» и перегори лампу – сам увидишь, что будет 🐾`,`At home appliances are connected in parallel. Reasons: 1) each appliance gets the same 220 V; 2) if one appliance goes off, the others keep working. In the virtual house choose “In series” and burn out a bulb – you will see what happens 🐾`],
+b_build:[`Тізбекті былай құра: 1) барлық құралды партаға сүйреп қой; 2) ток көзі → кілт → амперметр → екі резистор ретімен сым жалғап, тізбекті тұйықта; 3) екі резисторды бір-біріне параллель қос; 4) вольтметрді резисторлардың екі ұшына параллель қос; 5) «Тізбекті тексеру» батырмасын бас. Қолың жетпесе – ЕҚБ режимінен дайын сызбаны көр 🐾`,`Собери цепь так: 1) перетащи все приборы на парту; 2) соедини проводами по порядку: источник → ключ → амперметр → два резистора, замкни цепь; 3) соедини два резистора параллельно; 4) подключи вольтметр параллельно к концам резисторов; 5) нажми «Проверить цепь». Если трудно – включи режим ОВЗ и посмотри готовую схему 🐾`,`Build the circuit like this: 1) drag all devices onto the desk; 2) join them with wires in order: source → key → ammeter → two resistors, and close the loop; 3) connect the two resistors in parallel; 4) connect the voltmeter across the ends of the resistors; 5) press “Check the circuit”. If it is hard, switch on SEN mode and look at the ready scheme 🐾`],
+b_tab:[`Кестеге құралдардың көрсетуін жаз: U, I₁, I₂ және I. Содан кейін есепте: I₁+I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I. I мен I₁+I₂ сандары шамамен бірдей шығуы керек. Солай шықты ма?`,`В таблицу запиши показания приборов: U, I₁, I₂ и I. Затем вычисли: I₁+I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I. Числа I и I₁+I₂ должны получиться примерно равными. Получилось?`,`In the table write the meter readings: U, I₁, I₂ and I. Then calculate: I₁+I₂, R₁ = U/I₁, R₂ = U/I₂, R = U/I. The numbers I and I₁+I₂ should be about equal. Are they?`],
+b_graph:[`График – түзу сызық, өйткені I = U/R. Алдымен серияны таңда (I₁, I₂ немесе I), сосын U = 2, 4, 6, 8, 10 В үшін нүктелерді қой. Үш түзу де координаталар басынан басталады. Қай түзу ең тік болады деп ойлайсың?`,`График – прямая линия, потому что I = U/R. Сначала выбери серию (I₁, I₂ или I), затем поставь точки для U = 2, 4, 6, 8, 10 В. Все три прямые начинаются в начале координат. Как думаешь, какая прямая будет самой крутой?`,`The graph is a straight line because I = U/R. First choose a series (I₁, I₂ or I), then place points for U = 2, 4, 6, 8, 10 V. All three lines start at the origin. Which line do you think will be the steepest?`],
+b_key:[`Кілт тізбекті қосады және өшіреді. Тізбекті құрастырып жатқанда кілт ашық болсын. Тізбекті тексергеннен кейін ғана «Кілтті қосу» батырмасын бас, сонда құралдардың тілі қозғалады.`,`Ключ замыкает и размыкает цепь. Пока собираешь цепь, ключ должен быть разомкнут. Только после проверки цепи нажми «Включить ключ» – стрелки приборов начнут двигаться.`,`The key closes and opens the circuit. While you build the circuit the key must be open. Only after the circuit check press “Turn the key on” – then the meter needles move.`],
+b_calc:[(a,b)=>`Екі кедергі параллель болса: R = R₁·R₂ / (R₁ + R₂). Сенің сандарыңмен: R = ${a}·${b} / (${a} + ${b}). Өзің есептеп көр! Нәтиже ${a} пен ${b}-дан кіші болуы керек 🐾`,(a,b)=>`Для двух параллельных сопротивлений: R = R₁·R₂ / (R₁ + R₂). С твоими числами: R = ${a}·${b} / (${a} + ${b}). Посчитай сам! Результат должен быть меньше и ${a}, и ${b} 🐾`,(a,b)=>`For two resistances in parallel: R = R₁·R₂ / (R₁ + R₂). With your numbers: R = ${a}·${b} / (${a} + ${b}). Work it out yourself! The result must be smaller than both ${a} and ${b} 🐾`],
+b_def:[`Мяу! Бұл сұрақты жақсы түсінбедім 🐾 Мына тақырыптардың бірін сұрап көр: бөлік құны, амперметр, вольтметр, кедергі, ток мен кернеу, тізбекті құрастыру, кесте, график, қауіпсіздік.`,`Мяу! Я не совсем понял вопрос 🐾 Попробуй спросить про одну из тем: цена деления, амперметр, вольтметр, сопротивление, ток и напряжение, сборка цепи, таблица, график, безопасность.`,`Meow! I did not quite get the question 🐾 Try asking about one of these: division value, ammeter, voltmeter, resistance, current and voltage, building the circuit, table, graph, safety.`]
+});
+function tr(k,...a){const e=T[k];if(!e)return k;const v=e[li];return typeof v==='function'?v(...a):v}
+function applyStatic(r=document){r.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=tr(e.dataset.i));r.querySelectorAll('[data-ip]').forEach(e=>e.placeholder=tr(e.dataset.ip));r.querySelectorAll('[data-it]').forEach(e=>e.title=tr(e.dataset.it))}
+/* ---------- AI ---------- */
+async function ai(system,msgs){
+  const h={'Content-Type':'application/json'},k=store.get('akey');
+  if(k){h['x-api-key']=k;h['anthropic-version']='2023-06-01';h['anthropic-dangerous-direct-browser-access']='true'}
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:h,body:JSON.stringify({model:'claude-sonnet-5-5',max_tokens:1000,system,messages:msgs})});
+  if(!r.ok)throw new Error(r.status);const d=await r.json();return d.content.map(c=>c.text||'').join('').trim();
+}
+const senOn=()=>document.body.classList.contains('sen');
+const senX=()=>senOn()?' Оқушы ерекше қажеттілігі бар бала (ЕҚБ): өте қарапайым, қысқа сөйлемдермен, мадақтай отырып жаз.':'';
+const SYS_C=()=>'Сен 8-сынып физика мұғалімісің. Тақырып: өткізгіштерді параллель қосу (U=U1=U2, I=I1+I2, 1/R=1/R1+1/R2, Ом заңы). Оқушының жауабын 2-3 қысқа сөйлеммен тексер. Қате болса дұрыс жауапты тікелей айтпай, қай жерде қате екенін және қалай түзетуге болатынын түсіндір. Жүйенің автоматты тексеруі берілген: онымен келіспесең, неге екенін ашық айт. Жауап тілі: '+LN[li]+'.'+senX();
+const SYS_B=()=>'Сен Барсиксің – физика зертханасының мультфильмдегі мейірімді мысық көмекшісісің. Қысқа (3-4 сөйлем), көңілді жауап бер, кейде 🐾 қолдан. Тақырып: өткізгіштерді параллель қосу, амперметр/вольтметр, бөлік құны, Ом заңы, қауіпсіздік. Оқушыға тапсырма жауабын дайын айтпа – бағыттаушы сұрақ қой немесе формула ұсын. Жауап тілі: '+LN[li]+'.'+senX();
+function local(q){q=q.toLowerCase();
+  if(q.length<22&&/сәлем|салем|привет|здравств|hello|\bhi\b|\bhey\b/.test(q))return tr('b_hello');
+  const nums=q.match(/\d+(?:[.,]\d+)?/g)||[];
+  if(nums.length>=2&&/параллель|параллельн|parallel|кедергі|сопротив|resist|\bом\b|ω/.test(q))return tr('b_calc',nums[0],nums[1]);
+  const m=[[/(неге|почему|why).*(параллель|параллельн|parallel)|(параллель|параллельн|parallel).*(неге|почему|why)|үйде|дома|at home/,'b_why'],
+   [/қысқа|замыкан|short/,'b_short'],[/гипотез|болжам|hypothes/,'b_hyp'],
+   [/құрастыр|қалай қос|тізбек.*(құр|қос)|собра|как.*(цеп|соедин|подключ)|build|assemble|how.*(connect|circuit)/,'b_build'],
+   [/кесте|таблиц|table/,'b_tab'],[/график|graph|plot/,'b_graph'],[/кілт|ключ|\bkey\b|switch/,'b_key'],
+   [/бөлік|делен|цена|divis|scale/,'b_div'],[/амперметр|ammeter/,'b_am'],[/вольтметр|voltmeter/,'b_vol'],
+   [/кедергі|сопротив|resist/,'b_res'],[/ток|кернеу|напряж|current|voltage|ампер|вольт/,'b_cur'],[/қауіп|безопас|safe/,'b_saf']];
+  for(const[r,k]of m)if(r.test(q))return tr(k);return tr('b_def')}
+/* ---------- verify ---------- */
+const log=[];
+async function verify(id,task,answer,ok,fallback){
+  const b=$('#fb-'+id);
+  b.innerHTML=`<span class="vd ${ok?'good':'bad'}">${ok?tr('v_ok'):tr('v_bad')}</span><div class="aib" id="ai-${id}">${tr('v_think')}</div>`;
+  let t;try{t=await ai(SYS_C(),[{role:'user',content:`Тапсырма: ${task}\nОқушы жауабы: ${answer}\nЖүйенің автоматты тексеруі: ${ok?'ДҰРЫС':'ҚАТЕ'}`}])}catch(e){t=fallback+tr('v_un')}
+  const a=$('#ai-'+id);a.innerHTML='🐱 '+t.replace(/\n/g,'<br>');
+  a.insertAdjacentHTML('afterend',`<div class="row noprint"><button class="btn s" data-dis="${id}">${tr('v_dis')}</button></div><div id="dis-${id}"></div>`);
+  b.querySelector('[data-dis]').onclick=e=>{const d=$('#dis-'+id);d.innerHTML=`<textarea placeholder="${tr('v_disph')}"></textarea><div class="row"><button class="btn o">${tr('v_send')}</button></div>`;d.querySelector('button').onclick=()=>{const v=d.querySelector('textarea').value.trim();if(!v)return;log.push({id,answer,note:v});store.set('dis',JSON.stringify(log));d.innerHTML=`<div class="aib">${tr('v_thx')}</div>`};e.target.style.display='none'};
+}
+/* ---------- equipment icons ---------- */
+const IC={
+source:'<svg viewBox="0 0 120 100"><rect x="8" y="22" width="104" height="60" rx="8" fill="#3b4a5f"/><rect x="14" y="28" width="46" height="22" rx="3" fill="#102a1c"/><text x="37" y="45" font-size="14" fill="#5dff9a" text-anchor="middle" font-family="monospace">6.0 V</text><circle cx="82" cy="40" r="10" fill="#cfd6df" stroke="#222"/><line x1="82" y1="40" x2="87" y2="34" stroke="#222" stroke-width="2"/><circle cx="30" cy="70" r="6" fill="#e5384f"/><circle cx="55" cy="70" r="6" fill="#111"/></svg>',
+resistor:'<svg viewBox="0 0 120 100"><rect x="10" y="62" width="100" height="10" rx="3" fill="#bbb"/><line x1="4" y1="50" x2="30" y2="50" stroke="#999" stroke-width="3"/><line x1="90" y1="50" x2="116" y2="50" stroke="#999" stroke-width="3"/><rect x="28" y="36" width="64" height="28" rx="12" fill="#e8c28a" stroke="#a37a3b"/><rect x="40" y="36" width="6" height="28" fill="#8a3d1b"/><rect x="54" y="36" width="6" height="28" fill="#222"/><rect x="68" y="36" width="6" height="28" fill="#e5384f"/><rect x="80" y="36" width="5" height="28" fill="#d4af37"/></svg>',
+lamp:'<svg viewBox="0 0 120 100"><circle cx="60" cy="40" r="27" fill="#fff6c2" stroke="#d6c25a" stroke-width="2"/><path d="M48 56 Q52 38 56 44 Q60 36 64 44 Q68 38 72 56" stroke="#555" fill="none" stroke-width="2"/><rect x="46" y="64" width="28" height="22" rx="3" fill="#aab2bd"/><rect x="46" y="70" width="28" height="4" fill="#7b8490"/><rect x="40" y="84" width="40" height="8" rx="3" fill="#333"/></svg>',
+ammeter:'<svg viewBox="0 0 120 100"><rect x="8" y="8" width="104" height="84" rx="8" fill="#2c2f36"/><rect x="14" y="14" width="92" height="52" rx="4" fill="#f8f5ea"/><path d="M26 58 A38 38 0 0 1 94 58" stroke="#222" fill="none"/><line x1="60" y1="58" x2="76" y2="30" stroke="#c0271b" stroke-width="2"/><text x="60" y="40" font-size="14" text-anchor="middle" font-weight="700">A</text><circle cx="34" cy="80" r="6" fill="#e5384f"/><circle cx="86" cy="80" r="6" fill="#222" stroke="#999"/></svg>',
+voltmeter:'<svg viewBox="0 0 120 100"><rect x="8" y="8" width="104" height="84" rx="8" fill="#2c2f36"/><rect x="14" y="14" width="92" height="52" rx="4" fill="#f8f5ea"/><path d="M26 58 A38 38 0 0 1 94 58" stroke="#222" fill="none"/><line x1="60" y1="58" x2="44" y2="30" stroke="#c0271b" stroke-width="2"/><text x="60" y="40" font-size="14" text-anchor="middle" font-weight="700">V</text><circle cx="34" cy="80" r="6" fill="#e5384f"/><circle cx="86" cy="80" r="6" fill="#222" stroke="#999"/></svg>',
+key:'<svg viewBox="0 0 120 100"><rect x="10" y="62" width="100" height="22" rx="5" fill="#6b4a2b"/><circle cx="30" cy="58" r="7" fill="#d9b44a"/><circle cx="90" cy="58" r="7" fill="#d9b44a"/><line x1="30" y1="58" x2="82" y2="26" stroke="#aaa" stroke-width="6" stroke-linecap="round"/><circle cx="84" cy="25" r="8" fill="#e5384f"/></svg>',
+wires:'<svg viewBox="0 0 120 100"><path d="M10 70 C30 10 50 100 70 40 S100 20 112 50" stroke="#e5384f" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M10 84 C40 40 60 94 90 60" stroke="#1b1b1b" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="10" cy="70" r="6" fill="#d9b44a"/><circle cx="112" cy="50" r="6" fill="#d9b44a"/></svg>',
+rheostat:'<svg viewBox="0 0 120 100"><rect x="10" y="50" width="100" height="30" rx="6" fill="#7a5230"/><g stroke="#c7a46a" stroke-width="3">'+Array.from({length:16},(_,i)=>`<line x1="${16+i*6}" y1="52" x2="${16+i*6}" y2="70"/>`).join('')+'</g><rect x="14" y="32" width="92" height="6" rx="3" fill="#aaa"/><rect x="48" y="22" width="14" height="30" rx="3" fill="#222"/><circle cx="18" cy="88" r="4" fill="#333"/><circle cx="102" cy="88" r="4" fill="#333"/></svg>'};
+const EQK=[['source','DC power supply school laboratory'],['resistor','resistor physics lab'],['lamp','small bulb lamp holder physics lab'],['ammeter','school physics ammeter'],['voltmeter','school physics voltmeter'],['key','school physics switch key knife'],['wires','connecting wires banana plug lab'],['rheostat','school rheostat slide']];
+function buildEq(){$('#eq').innerHTML=EQK.map(([k,q])=>`<figure><div class="im"><img src="photos/${k}.jpg" alt="" onerror="this.parentNode.innerHTML=IC['${k}']"></div><figcaption><b data-i="eq_${k}_t"></b><span data-i="eq_${k}_d"></span><br><a target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}" data-i="real_photo"></a></figcaption></figure>`).join('');applyStatic($('#eq'))}
+/* ---------- dials ---------- */
+function dialInner(max,maj,sub,unit){
+  let s='<rect width="200" height="130" rx="8" fill="#f8f5ea"/>';const N=Math.round(max/maj*sub),cx=100,cy=122,r=88,P=a=>[cx+r*Math.sin(a),cy-r*Math.cos(a)];
+  const a0=-55*Math.PI/180,a1=55*Math.PI/180;s+=`<path d="M${P(a0)} A${r} ${r} 0 0 1 ${P(a1)}" fill="none" stroke="#222" stroke-width="1.5"/>`;
+  for(let i=0;i<=N;i++){const a=(-55+110*i/N)*Math.PI/180,M=i%sub===0,r2=r-(M?14:7);
+    s+=`<line x1="${cx+r*Math.sin(a)}" y1="${cy-r*Math.cos(a)}" x2="${cx+r2*Math.sin(a)}" y2="${cy-r2*Math.cos(a)}" stroke="#222" stroke-width="${M?2:1}"/>`;
+    if(M){const rl=r-26;s+=`<text x="${cx+rl*Math.sin(a)}" y="${cy-rl*Math.cos(a)+4}" font-size="11" text-anchor="middle" fill="#222">${R2(i/sub*maj)}</text>`}}
+  return s+`<text x="100" y="70" font-size="22" font-weight="800" text-anchor="middle" fill="#222">${unit}</text><g class="nd" style="transform-origin:100px 122px;transform:rotate(-55deg);transition:transform 1.1s cubic-bezier(.3,1.5,.5,1)"><line x1="100" y1="122" x2="100" y2="38" stroke="#c0271b" stroke-width="2"/></g><circle cx="100" cy="122" r="6" fill="#222"/>`;}
+function needle(root,v,max){const n=root&&root.querySelector('.nd');if(n)n.style.transform=`rotate(${-55+110*Math.min(Math.max(v,0),max*1.05)/max}deg)`}
+/* ---------- division value tasks (2 meters) ---------- */
+const DVP=[[{u:'A',max:3,maj:1,sub:5,n:'amm'},{u:'A',max:1.5,maj:.5,sub:5,n:'amm'}],[{u:'V',max:6,maj:2,sub:4,n:'vol'},{u:'V',max:15,maj:5,sub:5,n:'vol'}]];
+function mkDV(n){const box=$('#dvbox'+n);let dv;
+  function nw(){dv={...rnd(DVP[n-1])};dv.c=R2(dv.maj/dv.sub,3);dv.k=1+Math.floor(Math.random()*(Math.round(dv.max/dv.c)-2));dv.val=R2(dv.k*dv.c,3);
+    box.innerHTML=`<div class="row" style="align-items:flex-start"><div class="meter"><svg viewBox="0 0 200 130" id="dvs${n}">${dialInner(dv.max,dv.maj,dv.sub,dv.u)}</svg></div>
+    <div><p><span data-i="dv_this"></span> <b data-i="nm_${dv.n}"></b> (${dv.u}). <span data-i="dv_where"></span></p>
+    <div class="row">1) <span data-i="dv_q1"></span> <input type="number" step="any" id="dv${n}a"> ${dv.u}</div>
+    <div class="row">2) <span data-i="dv_q2"></span> <input type="number" step="any" id="dv${n}b"> ${dv.u}</div>
+    <div class="row">3) <span data-i="dv_q3"></span> <input type="number" step="any" id="dv${n}c"> ${dv.u}</div>
+    <div class="row"><button class="btn" id="dvc${n}" data-i="dv_chk"></button><button class="btn s" id="dvn${n}" data-i="dv_new"></button></div></div></div><div class="fb" id="fb-dv${n}"></div>`;
+    applyStatic(box);setTimeout(()=>needle($('#dvs'+n),dv.val,dv.max),100);
+    $('#dvn'+n).onclick=nw;
+    $('#dvc'+n).onclick=()=>{const a=+$('#dv'+n+'a').value,b=+$('#dv'+n+'b').value,c=+$('#dv'+n+'c').value,ok1=Math.abs(a-dv.c)<1e-6,ok2=Math.abs(b-dv.val)<1e-6,ok3=Math.abs(c-dv.c/2)<1e-6;
+      verify('dv'+n,`Шкала ${dv.max} ${dv.u} дейін, ${dv.maj} ${dv.u} аралығында ${dv.sub} бөлік. Көрсеткіш ${dv.val} ${dv.u}-те. Бөлік құнын, көрсетуді және қателікті (c/2) тап.`,`c=${a}, көрсету=${b}, қателік=${c}`,ok1&&ok2&&ok3,tr('dv_fb',ok1,ok2,ok3,dv.maj,dv.sub))};}
+  nw();}
+/* ---------- virtual lab (shelf + desk, drag & drop) ---------- */
+const PRE=[[10,15,6],[20,30,6],[12,6,6],[30,60,6],[10,40,8]];
+const [Ra,Rb,Us]=rnd(PRE),I1=Us/Ra,I2=Us/Rb,IT=I1+I2;
+const IDS=['src','key','amm','vol','r1','r2'];
+const DEV={src:{w:150,h:150,t:{S1:[40,150],S2:[110,150]}},key:{w:140,h:62,t:{K1:[25,38],K2:[115,38]}},amm:{w:200,h:175,t:{A1:[55,175],A2:[145,175]}},vol:{w:200,h:175,t:{V1:[55,175],V2:[145,175]}},r1:{w:200,h:60,t:{Ra:[0,30],Rb:[200,30]}},r2:{w:200,h:60,t:{Sa:[0,30],Sb:[200,30]}}};
+const TD={};IDS.forEach(i=>Object.keys(DEV[i].t).forEach(k=>TD[k]=i));const TK=Object.keys(TD);
+const SC=.8,SH=.4,DT=152,pos={};
+const slotXY=i=>{const d=DEV[i];return[22+IDS.indexOf(i)*158+(148-d.w*SH)/2,12+(96-d.h*SH)/2]};
+let wires=[],sel=null,built=false,keyOn=false,apos=0,drag=null;const WC=['#e5384f','#1b1b1b','#2472ff','#12a566','#ff7a3d','#8a3cf0'];
+function meterBody(lab,max,maj,sub,id){return `<rect width="200" height="175" rx="12" fill="#2c2f36"/><svg x="10" y="10" width="180" height="117" viewBox="0 0 200 130" id="${id}">${dialInner(max,maj,sub,lab)}</svg><text x="100" y="152" fill="#aaa" font-size="13" text-anchor="middle">${tr(lab==='A'?'lab_am':'lab_vm')}</text>`}
+function devMk(i){
+  if(i==='src')return `<rect width="150" height="150" rx="10" fill="#3b4a5f"/><rect x="15" y="20" width="120" height="44" rx="5" fill="#102a1c"/><text x="75" y="53" font-size="26" fill="#5dff9a" text-anchor="middle" font-family="monospace">${Us.toFixed(1)} V</text><text x="75" y="96" fill="#cbd5e1" font-size="12" text-anchor="middle" font-weight="700">${tr('lab_src')}</text><text x="40" y="134" font-size="18" fill="#ff9aa6" text-anchor="middle" font-weight="900">+</text><text x="110" y="134" font-size="18" fill="#fff" text-anchor="middle" font-weight="900">−</text>`;
+  if(i==='key')return `<rect width="140" height="62" rx="8" fill="#6b4a2b"/><text x="70" y="57" font-size="11" fill="#f5e6cf" text-anchor="middle" font-weight="700">${tr('lab_key')}</text><circle cx="25" cy="38" r="9" fill="#d9b44a"/><circle cx="115" cy="38" r="9" fill="#d9b44a"/><line x1="25" y1="38" x2="${keyOn?115:90}" y2="${keyOn?38:12}" stroke="#bbb" stroke-width="7" stroke-linecap="round"/>`;
+  if(i==='amm')return meterBody('A',2,.5,5,'amL');
+  if(i==='vol')return meterBody('V',10,2,4,'vmL');
+  const y=0;return `<line x1="0" y1="30" x2="30" y2="30" stroke="#999" stroke-width="5"/><line x1="170" y1="30" x2="200" y2="30" stroke="#999" stroke-width="5"/><rect x="30" y="5" width="140" height="50" rx="22" fill="#e8c28a" stroke="#a37a3b" stroke-width="2"/><rect x="60" y="5" width="12" height="50" fill="#8a3d1b"/><rect x="85" y="5" width="12" height="50" fill="#222"/><rect x="110" y="5" width="12" height="50" fill="#e5384f"/><rect x="142" y="5" width="9" height="50" fill="#d4af37"/><text x="100" y="80" font-size="16" text-anchor="middle" font-weight="800" fill="#3a2a10">${tr('lab_'+i)}</text>`;}
+function drawLab(){
+  let s=`<defs><linearGradient id="wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcbd8e"/><stop offset="1" stop-color="#c49a62"/></linearGradient><linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ebf5"/><stop offset="1" stop-color="#c5d0e4"/></linearGradient></defs>`;
+  s+=`<rect x="0" y="0" width="980" height="140" fill="url(#sh)"/><rect x="0" y="140" width="980" height="12" fill="#8a6a42"/><rect x="0" y="152" width="980" height="448" fill="url(#wd)"/>`;
+  for(let x=0;x<980;x+=140)s+=`<line x1="${x}" y1="152" x2="${x}" y2="600" stroke="#a9814f" stroke-opacity=".35" stroke-width="2"/>`;
+  s+=`<text x="490" y="590" font-size="22" font-weight="900" text-anchor="middle" fill="#8a6a42" fill-opacity=".5">${tr('lab_desk')}</text><text id="hdesk" x="490" y="380" font-size="22" font-weight="800" text-anchor="middle" fill="#6b4a2b" fill-opacity=".7">${tr('lab_drop')}</text>`;
+  IDS.forEach((i,n)=>{s+=`<rect x="${22+n*158}" y="6" width="148" height="112" rx="10" fill="none" stroke="#7b8ba6" stroke-width="2" stroke-dasharray="6 5"/><text x="${22+n*158+74}" y="134" font-size="14" font-weight="800" text-anchor="middle" fill="#33405a">${tr('sh_'+i)}</text>`});
+  IDS.forEach(i=>{s+=`<g class="dev" id="d-${i}" data-d="${i}">${devMk(i)}</g>`});
+  s+=`<g id="wl"></g><g id="tl"></g>`;
+  $('#lab').innerHTML=s;layout();refreshMeters();}
+function tp(k){const i=TD[k],p=pos[i],t=DEV[i].t[k];return[p.x+t[0]*SC,p.y+t[1]*SC]}
+function layout(){
+  IDS.forEach(i=>{const g=$('#d-'+i);if(!g)return;const p=pos[i];if(p)g.setAttribute('transform',`translate(${p.x},${p.y}) scale(${SC})`);else{const[x,y]=slotXY(i);g.setAttribute('transform',`translate(${x},${y}) scale(${SH})`)}});
+  const wl=$('#wl'),tl=$('#tl');if(!wl)return;
+  wl.innerHTML=wires.map((w,i)=>{const a=tp(w[0]),b=tp(w[1]),m=Math.min(Math.max(a[1],b[1])+45+(i%4)*14,596);return `<path class="wire" data-w="${i}" d="M${a} C${a[0]},${m} ${b[0]},${m} ${b}" fill="none" stroke="${WC[i%6]}" stroke-width="6" stroke-linecap="round"/>`}).join('');
+  tl.innerHTML=TK.filter(k=>pos[TD[k]]).map(k=>{const[x,y]=tp(k);return `<g class="term" data-t="${k}"><circle cx="${x}" cy="${y}" r="10" fill="${k==='S1'?'#e5384f':'#d9b44a'}" stroke="${sel===k?'#6c3cf0':'#333'}" stroke-width="${sel===k?5:2}"/><circle cx="${x}" cy="${y}" r="3.5" fill="#333"/><circle cx="${x}" cy="${y}" r="20" fill="transparent"/></g>`}).join('');
+  const hd=$('#hdesk');if(hd)hd.style.display=IDS.some(i=>pos[i])?'none':'';
+  $('#sel').textContent=sel?tr('lab_sel',tr('nm_'+TD[sel])+' ('+sel+')'):'';}
+const svgP=e=>{const r=$('#lab').getBoundingClientRect();return[(e.clientX-r.left)*980/r.width,(e.clientY-r.top)*600/r.height]};
+function unbuild(){built=false;$('#meas').style.display='none'}
+$('#lab').addEventListener('pointerdown',e=>{const g=e.target.closest('.dev');if(!g||e.target.closest('.term'))return;e.preventDefault();
+  const i=g.dataset.d,d=DEV[i],[x,y]=svgP(e);let p=pos[i];
+  if(!p){p={x:x-d.w*SC/2,y:y-d.h*SC/2};pos[i]=p;drag={id:i,ox:d.w*SC/2,oy:d.h*SC/2}}else drag={id:i,ox:x-p.x,oy:y-p.y};
+  const wl=$('#wl');wl.parentNode.insertBefore(g,wl);sel=null;unbuild();layout()});
+window.addEventListener('pointermove',e=>{if(!drag)return;const d=DEV[drag.id],[x,y]=svgP(e);pos[drag.id]={x:Math.max(4,Math.min(976-d.w*SC,x-drag.ox)),y:Math.max(0,Math.min(585-d.h*SC,y-drag.oy))};layout()});
+window.addEventListener('pointerup',()=>{if(!drag)return;const i=drag.id,d=DEV[i],p=pos[i];drag=null;
+  if(p.y+d.h*SC/2<DT){delete pos[i];wires=wires.filter(w=>TD[w[0]]!==i&&TD[w[1]]!==i)}else p.y=Math.max(DT+6,p.y);
+  unbuild();layout()});
+$('#lab').addEventListener('click',e=>{const t=e.target.closest('.term');
+  if(t){const k=t.dataset.t;if(!sel)sel=k;else if(sel===k)sel=null;else{if(!wires.some(w=>(w[0]===sel&&w[1]===k)||(w[0]===k&&w[1]===sel)))wires.push([sel,k]);sel=null;unbuild()}layout();return}
+  const w=e.target.closest('.wire');if(w){wires.splice(+w.dataset.w,1);unbuild();layout()}});
+function refreshMeters(){const A=$('#amL'),V=$('#vmL');if(!A)return;const on=built&&keyOn;needle(A,on?[IT,I1,I2][apos]:0,2);needle(V,on?Us:0,10)}
+function analyze(){
+  if(IDS.some(i=>!pos[i]))return tr('e_place');
+  const par={};const Fn=x=>par[x]===undefined?x:(par[x]=Fn(par[x]));
+  const un=(a,b)=>{a=Fn(a);b=Fn(b);if(a!==b)par[a]=b};wires.forEach(w=>un(w[0],w[1]));const n=k=>Fn(k);
+  const comp={src:['S1','S2'],key:['K1','K2'],amm:['A1','A2'],vol:['V1','V2'],r1:['Ra','Rb'],r2:['Sa','Sb']};
+  const deg={};wires.forEach(w=>{deg[w[0]]=1;deg[w[1]]=1});
+  for(const k in comp)for(const t of comp[k])if(!deg[t])return tr('e_open',tr('nm_'+k));
+  if(n('S1')===n('S2'))return tr('e_short');
+  if(n('A1')===n('A2'))return tr('e_amshort');
+  const r1=[n('Ra'),n('Rb')],r2=[n('Sa'),n('Sb')];
+  if(r1[0]===r1[1]||r2[0]===r2[1])return tr('e_rshort');
+  const same=(a,b)=>(a[0]===b[0]&&a[1]===b[1])||(a[0]===b[1]&&a[1]===b[0]);
+  if(!same(r1,r2))return tr('e_notpar');
+  const vv=[n('V1'),n('V2')];
+  if(!same(vv,r1))return tr('e_vol');
+  const E=[[n('S1'),n('S2')],[n('K1'),n('K2')],[n('A1'),n('A2')],r1],ns=new Set(E.flat()),dg={};
+  E.flat().forEach(x=>dg[x]=(dg[x]||0)+1);
+  if(ns.size!==4||Object.values(dg).some(v=>v!==2))return tr('e_main');
+  return '';}
+$('#clr').onclick=()=>{wires=[];sel=null;unbuild();$('#fb-lab').innerHTML='';layout()};
+$('#rst').onclick=()=>{wires=[];sel=null;IDS.forEach(i=>delete pos[i]);keyOn=false;unbuild();$('#fb-lab').innerHTML='';drawLab()};
+$('#hintb').onclick=()=>$('#schem').classList.toggle('hid');
+$('#chk').onclick=()=>{const e=analyze(),ok=!e;if(ok){built=true;$('#meas').style.display='block';$('#uu').textContent=Us+' '+tr('u_V')}
+  verify('lab','Виртуалды зертханада параллель жалғанған 2 резисторлы тізбек құрастыру (амперметр тізбектей, вольтметр параллель, кілт, ток көзі).',`${wires.length} сым: `+wires.map(w=>w.join('–')).join(', '),ok,ok?tr('lab_ok'):e.replace(/^\S+\s/,''));refreshMeters();if(ok)$('#meas').scrollIntoView({behavior:'smooth',block:'nearest'})};
+function keyTxt(){$('#keyb').innerHTML=tr(keyOn?'key_off':'key_on')}
+$('#keyb').onclick=()=>{keyOn=!keyOn;keyTxt();drawLab()};
+$$('.pill[data-p]').forEach(p=>p.onclick=()=>{apos=+p.dataset.p;$$('.pill[data-p]').forEach(x=>x.classList.toggle('on',x===p));refreshMeters()});
+/* ---------- table ---------- */
+$('#tchk').onclick=()=>{const v=$$('#trow input').map(i=>i.value===''?NaN:+i.value),exp=[Us,I1,I2,IT,IT,Ra,Rb,Ra*Rb/(Ra+Rb)],tol=[.3,.06,.06,.06,.06,Ra*.1,Rb*.1,exp[7]*.1],nm=['U','I₁','I₂','I','I₁+I₂','R₁','R₂','R'];
+  const bad=v.map((x,i)=>isNaN(x)||Math.abs(x-exp[i])>tol[i]?nm[i]:null).filter(Boolean);
+  verify('tbl','Параллель тізбектің кестесі: U, I₁, I₂, I, I₁+I₂, R₁, R₂, R. Құралдар көрсеткен мәндер: U='+Us+' В, I₁='+R2(I1)+' А, I₂='+R2(I2)+' А, I='+R2(IT)+' А (R₁='+Ra+', R₂='+Rb+' Ом, R='+R2(exp[7])+' Ом).','U,I₁,I₂,I,ΣI,R₁,R₂,R = '+v.join('; '),!bad.length,bad.length?tr('tb_bad',bad.join(', ')):tr('tb_ok'))};
+$('#cchk').onclick=()=>{const t=$('#concl').value.trim(),ok=t.length>25&&/аз|кіші|кемиді|азаяды|меньш|уменьш|less|smaller|decreas|lower/i.test(t)&&/қосынды|тең|бірдей|сумм|равн|одинак|sum|equal|same/i.test(t);
+  verify('con','Қорытынды: параллель жалғауда U бірдей, I=I₁+I₂, R жеке кедергілерден аз. Оқушы қорытындысы гипотезаны растай ма?',t||'(бос)',ok,ok?tr('c_ok'):tr('c_bad'))};
+/* ---------- graph ---------- */
+const ymax=Math.ceil((1/Ra+1/Rb)*10*2)/2,ys=ymax/10,Us_=[2,4,6,8,10],pts={I1:[],I2:[],I:[]},COL={I1:'#2472ff',I2:'#ff7a3d',I:'#12a566'};let gs='I1';
+const fx=u=>50+u*55,fy=i=>350-i/ymax*320;
+$('#gser').innerHTML='<b data-i="gr_series"></b> '+['I1','I2','I'].map(k=>`<span class="pill ${k===gs?'on':''}" data-s="${k}" style="border-color:${COL[k]}">${k==='I1'?'I₁':k==='I2'?'I₂':'I = I₁+I₂'}</span>`).join('');
+$$('#gser .pill').forEach(p=>p.onclick=()=>{gs=p.dataset.s;$$('#gser .pill').forEach(x=>x.classList.toggle('on',x===p))});
+function drawG(){let s='';for(let i=0;i<=10;i++){s+=`<line x1="${fx(i)}" y1="30" x2="${fx(i)}" y2="350" stroke="#e6e2fb"/><text x="${fx(i)}" y="368" font-size="12" text-anchor="middle" fill="#1b1740">${i}</text><line x1="50" y1="${fy(i*ys)}" x2="600" y2="${fy(i*ys)}" stroke="#e6e2fb"/><text x="44" y="${fy(i*ys)+4}" font-size="11" text-anchor="end" fill="#1b1740">${R2(i*ys)}</text>`}
+  s+=`<line x1="50" y1="350" x2="610" y2="350" stroke="#222" stroke-width="2"/><line x1="50" y1="350" x2="50" y2="22" stroke="#222" stroke-width="2"/><text x="578" y="392" font-size="13" font-weight="800" fill="#1b1740">U, ${tr('u_V')}</text><text x="8" y="20" font-size="13" font-weight="800" fill="#1b1740">I, ${tr('u_A')}</text>`;
+  for(const k in pts){const p=[...pts[k]].sort((a,b)=>a[0]-b[0]);if(p.length>1)s+=`<polyline fill="none" stroke="${COL[k]}" stroke-width="2.5" points="${p.map(q=>fx(q[0])+','+fy(q[1])).join(' ')}"/>`;p.forEach(q=>s+=`<circle cx="${fx(q[0])}" cy="${fy(q[1])}" r="6" fill="${COL[k]}" stroke="#fff" stroke-width="2"/>`)}
+  $('#gr').innerHTML=s}
+$('#gr').onclick=e=>{const r=$('#gr').getBoundingClientRect(),x=(e.clientX-r.left)*620/r.width,y=(e.clientY-r.top)*400/r.height,u=Math.round((x-50)/55),i=Math.round((350-y)/320*10)*ys;if(u<0||u>10||i<0||i>ymax+1e-9)return;
+  const a=pts[gs],j=a.findIndex(q=>q[0]===u&&Math.abs(q[1]-i)<1e-9);j>=0?a.splice(j,1):a.push([u,R2(i,3)]);drawG()};
+$('#gclr').onclick=()=>{for(const k in pts)pts[k]=[];drawG()};
+$('#gchk').onclick=()=>{const ex={I1:Ra,I2:Rb,I:Ra*Rb/(Ra+Rb)},msgs=[];let ok=true;
+  for(const k in ex){const need=Us_.filter(u=>pts[k].some(q=>q[0]===u&&Math.abs(q[1]-u/ex[k])<=ys*.6)),extra=pts[k].length-need.length;if(need.length<5||extra>0){ok=false;msgs.push(tr('g_pts',k==='I1'?'I₁':k==='I2'?'I₂':'I',need.length,extra))}}
+    verify('grf',`I(U) графигі: R₁=${Ra} Ом, R₂=${Rb} Ом; U=2,4,6,8,10 В. I₁=U/R₁, I₂=U/R₂, I=I₁+I₂. Әр серия бастапқы нүктеден өтетін түзу.`,JSON.stringify(pts),ok,ok?tr('g_ok'):tr('g_bad',msgs.join('; ')))};
+/* ---------- house simulator ---------- */
+let hm='par',hb=[0,0,0];
+function drawSim(){
+  const X=[200,400,600],par=hm==='par',n=hb.filter(Boolean).length;
+  const I=par?(3-n)*.25:(n?0:.083),Ub=par?220:(n?0:73.3),live=par?n<3:n===0;
+  const ln=(d,l)=>`<path d="${d}" class="${l?'fl':'dead'}" fill="none" stroke-linecap="round"/>`;
+  let s=`<svg viewBox="0 0 700 330" class="simsvg">`;
+  s+=`<rect x="20" y="100" width="90" height="130" rx="10" fill="#3b4a5f"/><text x="65" y="148" fill="#5dff9a" font-size="22" text-anchor="middle" font-family="monospace" font-weight="700">220 V</text><text x="65" y="176" fill="#cbd5e1" font-size="12" text-anchor="middle" font-weight="800">${tr('sim_panel')}</text><text x="65" y="205" font-size="22" text-anchor="middle">🔌</text>`;
+  if(par){s+=ln('M65 100V40H650',live)+ln('M65 230V290H650',live);X.forEach((x,i)=>{const l=!hb[i];s+=ln(`M${x} 40V131`,l)+ln(`M${x} 199V290`,l)+`<circle cx="${x}" cy="40" r="5" fill="#555"/><circle cx="${x}" cy="290" r="5" fill="#555"/>`})}
+  else{s+=ln('M110 165H166',live)+ln('M234 165H366',live)+ln('M434 165H566',live)+ln('M634 165H670V290H65V230',live)}
+  X.forEach((x,i)=>{const b=hb[i],lit=!b&&(par||n===0),br=lit?(par?1:.45):0;
+    s+=`<g class="bulb" data-b="${i}" style="cursor:pointer">${lit?`<circle cx="${x}" cy="165" r="52" fill="#ffe066" opacity="${.3*br}"/>`:''}<circle cx="${x}" cy="165" r="34" fill="${lit?'#ffe066':'#e9e4d0'}" fill-opacity="${lit?.35+.65*br:1}" stroke="#a8a070" stroke-width="3"/><path d="M${x-12} 188 Q${x-8} 160 ${x-4} 170 Q${x} 156 ${x+4} 170 Q${x+8} 160 ${x+12} 188" stroke="${b?'#999':'#555'}" fill="none" stroke-width="2.5"/>${b?`<path d="M${x-22} 143L${x+22} 187M${x+22} 143L${x-22} 187" stroke="#e5384f" stroke-width="5" stroke-linecap="round"/>`:''}<rect x="${x-15}" y="196" width="30" height="14" rx="3" fill="#8a8f98"/><text x="${x+40}" y="${par?152:128}" font-size="15" font-weight="800" fill="#33405a">${tr('sim_b')} ${i+1}</text></g>`});
+  s+=`</svg>`;
+  const key=par?(n===0?'sim_s1':n<3?'sim_s2':'sim_s3'):(n===0?'sim_s4':'sim_s5');
+  $('#simbox').innerHTML=`<div class="row noprint"><span class="pill ${par?'on':''}" data-m="par">${tr('sim_par')}</span><span class="pill ${par?'':'on'}" data-m="ser">${tr('sim_ser')}</span><button class="btn s" id="simrep">${tr('sim_rep')}</button><span class="hint">${tr('sim_hint')}</span></div>${s}<div class="box ${n&&!par?'r':'g'}" style="margin-top:10px"><b>${tr('sim_I')}</b> <span class="mono">${F(R2(I,3))} ${tr('u_A')}</span> &nbsp;·&nbsp; <b>${tr('sim_U')}</b> <span class="mono">${F(R2(Ub,1))} ${tr('u_V')}</span><br>${tr(key)}</div>`;
+  $$('#simbox [data-m]').forEach(p=>p.onclick=()=>{hm=p.dataset.m;drawSim()});
+  $('#simrep').onclick=()=>{hb=[0,0,0];drawSim()};
+  $$('#simbox .bulb').forEach(g=>g.onclick=()=>{const i=+g.dataset.b;hb[i]=hb[i]?0:1;drawSim()});}
+/* ---------- life tasks + game ---------- */
+const AP=[['🍵',10],['🍳',8],['📺',1],['🔥',5],['💡',.5],['🧊',1.5]];let on=new Set();
+const tot=()=>[...on].reduce((s,i)=>s+AP[i][1],0);
+function drawApps(){$('#apps').innerHTML=AP.map((a,i)=>`<div class="app ${on.has(i)?'on':''}" data-i2="${i}"><div class="e">${a[0]}</div><b>${tr('ap'+i)}</b><div class="hint">${F(a[1])} ${tr('u_A')}</div></div>`).join('');
+  $$('.app').forEach(d=>d.onclick=()=>{const i=+d.dataset.i2;on.has(i)?on.delete(i):on.add(i);if(tot()>16){$('#trip').style.display='block';on=new Set();setTimeout(()=>$('#trip').style.display='none',2500)}drawApps()});
+  const t=tot();$('#gI').textContent=F(R2(t))+' '+tr('u_A');$('#gP').textContent='P = '+R2(t*220,0)+' '+tr('u_W')+' · U = 220 '+tr('u_V');$('#gdial').innerHTML=dialInner(20,5,5,'A');setTimeout(()=>needle($('#gdial'),t,20),30)}
+$('#greset').onclick=()=>{on=new Set();drawApps()};
+$$('[data-l]').forEach(b=>b.onclick=()=>{const n=b.dataset.l;
+  if(n==='2'){const v=+$('#l2').value,c=$('#l2b').value;verify('l2','Екі бірдей 6 Ом фара параллель. Жалпы кедергі (дұрыс 3 Ом) және бір фара күйсе екіншісі жануын жалғастырады.',v+' Ом; '+(c==='1'?'жануын жалғастырады':c==='0'?'да сөнеді':'таңдалмаған'),Math.abs(v-3)<.05&&c==='1',tr('f_l2'))}
+  if(n==='3'){const t=tot();verify('l3','Ойын: құралдарды қосып ток күшін 14–16 А аралығына жеткізу (желі 220 В, сақтандырғыш 16 А).','Қосылғандар: '+([...on].map(i=>tr('ap'+i)).join(', ')||'жоқ')+'; жалпы ток '+t+' А',t>=14&&t<=16,tr('f_l3',F(t)))}
+  if(n==='4'){const t=$('#l4').value.trim(),ok=(t.length>20&&/220|бірдей кернеу|кернеу бірдей|одинаков|same voltage|equal voltage/i.test(t))||/бірі.*(сөн|өш|істей)|тәуелсіз|независим|одно.*(выключ|перегор|погас)|one.*(off|burn|fail|break)|independent/i.test(t);verify('l4','Үй құралдары неге параллель жалғанады? (дұрыс: әр құралға бірдей 220 В түседі, бірі сөнсе басқалары жұмыс істей береді, әр құрал өз бетінше қосылады)',t||'(бос)',ok,tr('f_l4'))}});
+/* ---------- test ---------- */
+const TQ=[
+{q:[`Параллель жалғауда әр өткізгіштің ұштарындағы кернеу…`,`При параллельном соединении напряжение на концах каждого проводника…`,`In a parallel connection the voltage across each conductor is…`],o:[[`бірдей`,`әртүрлі`,`қосылады`,`нөлге тең`],[`одинаково`,`разное`,`складывается`,`равно нулю`],[`the same`,`different`,`added up`,`zero`]],a:0},
+{q:[`Параллель тізбектегі жалпы ток күші…`,`Общая сила тока в параллельной цепи…`,`The total current in a parallel circuit is…`],o:[[`I = I₁ = I₂`,`I = I₁ + I₂`,`I = I₁ · I₂`,`I = I₁ − I₂`],[`I = I₁ = I₂`,`I = I₁ + I₂`,`I = I₁ · I₂`,`I = I₁ − I₂`],[`I = I₁ = I₂`,`I = I₁ + I₂`,`I = I₁ · I₂`,`I = I₁ − I₂`]],a:1},
+{q:[`R₁ = R₂ = 10 Ом өткізгіштер параллель жалғанса, жалпы кедергі…`,`Если R₁ = R₂ = 10 Ом соединены параллельно, общее сопротивление…`,`If R₁ = R₂ = 10 Ω are connected in parallel, the total resistance is…`],o:[[`20 Ом`,`10 Ом`,`5 Ом`,`100 Ом`],[`20 Ом`,`10 Ом`,`5 Ом`,`100 Ом`],[`20 Ω`,`10 Ω`,`5 Ω`,`100 Ω`]],a:2},
+{q:[`Амперметр тізбекке қалай жалғанады?`,`Как амперметр включается в цепь?`,`How is an ammeter connected to the circuit?`],o:[[`параллель`,`тізбектей`,`екі жолмен де`,`жалғанбайды`],[`параллельно`,`последовательно`,`обоими способами`,`не подключается`],[`in parallel`,`in series`,`either way`,`not connected`]],a:1},
+{q:[`Вольтметр өлшенетін өткізгішке қалай жалғанады?`,`Как вольтметр подключается к измеряемому проводнику?`,`How is a voltmeter connected to the conductor measured?`],o:[[`тізбектей`,`параллель`,`тек ток көзіне`,`тізбекке қарсы`],[`последовательно`,`параллельно`,`только к источнику`,`против цепи`],[`in series`,`in parallel`,`only to the source`,`against the circuit`]],a:1},
+{q:[`R₁ = 6 Ом, R₂ = 3 Ом параллель. R = ?`,`R₁ = 6 Ом, R₂ = 3 Ом параллельно. R = ?`,`R₁ = 6 Ω, R₂ = 3 Ω in parallel. R = ?`],o:[[`9 Ом`,`4,5 Ом`,`2 Ом`,`18 Ом`],[`9 Ом`,`4,5 Ом`,`2 Ом`,`18 Ом`],[`9 Ω`,`4.5 Ω`,`2 Ω`,`18 Ω`]],a:2},
+{q:[`Параллель тармақ санын көбейтсек, жалпы кедергі…`,`Если увеличить число параллельных ветвей, общее сопротивление…`,`If we add more parallel branches, the total resistance…`],o:[[`артады`,`азаяды`,`өзгермейді`,`шексіз болады`],[`растёт`,`уменьшается`,`не меняется`,`становится бесконечным`],[`increases`,`decreases`,`stays the same`,`becomes infinite`]],a:1},
+{q:[`Шкаласы 0–3 А, 0 мен 1 арасында 5 бөлік. Бөлік құны?`,`Шкала 0–3 А, между 0 и 1 пять делений. Цена деления?`,`The scale is 0–3 A, with 5 divisions between 0 and 1. Division value?`],o:[[`0,1 А`,`0,2 А`,`0,5 А`,`1 А`],[`0,1 А`,`0,2 А`,`0,5 А`,`1 А`],[`0.1 A`,`0.2 A`,`0.5 A`,`1 A`]],a:1},
+{q:[`Үйдегі розеткаға құралдар параллель қосылады, себебі…`,`Приборы в розетках дома включают параллельно, потому что…`,`Home appliances are connected in parallel because…`],o:[[`әрқайсысына бірдей 220 В түседі және біреуі сөнсе, басқасы жұмыс істей береді`,`ток аз жұмсалады`,`сымдар үнемделеді`,`кернеу бөлінеді`],[`на каждый приходится одинаковые 220 В, и если один выключен, остальные работают`,`тока тратится меньше`,`экономятся провода`,`напряжение делится`],[`each gets the same 220 V and if one is off the others keep working`,`less current is used`,`wires are saved`,`the voltage is divided`]],a:0}];
+function buildTest(){const keep=TQ.map((q,i)=>{const v=document.querySelector(`input[name=t${i}]:checked`);return v?+v.value:-1});
+  $('#test').innerHTML=TQ.map((q,i)=>`<div class="q${i>=5?' sen-hide':''}" id="q${i}"><b>${i+1}. ${q.q[li]}</b>${q.o[li].map((o,j)=>`<label><input type="radio" name="t${i}" value="${j}" ${keep[i]===j?'checked':''}> ${o}</label>`).join('')}</div>`).join('')}
+$('#tsub').onclick=()=>{const N=senOn()?5:TQ.length;let sc=0,wr=[];TQ.slice(0,N).forEach((q,i)=>{const v=document.querySelector(`input[name=t${i}]:checked`),ok=v&&+v.value===q.a,el=$('#q'+i);el.classList.remove('ok','no');el.classList.add(ok?'ok':'no');ok?sc++:wr.push(`${i+1}-сұрақ: оқушы «${v?q.o[0][+v.value]:'жауап жоқ'}», дұрыс «${q.o[0][q.a]}»`)});
+  verify('test',`Тест (${N} сұрақ). Қате жауаптар: ${wr.join('; ')||'жоқ'}.`,`${sc}/${N}`,sc>=Math.ceil(N*.7),tr('ts_fb',sc,N));$('#fb-test').insertAdjacentHTML('afterbegin',`<h3>${tr('ts_res',sc,N)} ${sc===N?'🏆':'⭐'}</h3>`)};
+/* ---------- self-assessment + peer review + student ---------- */
+function buildSA(){const st=JSON.parse(store.get('sa')||'[]');
+  $('#sa').innerHTML=[1,2,3,4,5].map(i=>`<label class="chk"><input type="checkbox" data-sa="${i}" ${st.includes(i)?'checked':''}><span data-i="sa_${i}"></span></label>`).join('');
+  $$('#sa input').forEach(c=>c.onchange=()=>{store.set('sa',JSON.stringify($$('#sa input:checked').map(x=>+x.dataset.sa)));updateSA()})}
+function updateSA(){const n=$$('#sa input:checked').length;$('#sab').style.width=n*20+'%';$('#sac').textContent=tr('sa_cnt',n,5)+(n===5?' 🏆':'')}
+['st1','st2','st3','pr1','pr2','pr3','pr4'].forEach(id=>{const e=$('#'+id);if(!e)return;const v=store.get('f_'+id);if(v)e.value=v;e.addEventListener('input',()=>store.set('f_'+id,e.value))});
+if(!$('#st3').value){const d=new Date();$('#st3').value=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+/* ---------- toolbar: language, theme, SEN, print, speech ---------- */
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',3500)}
+function setTheme(t){document.documentElement.dataset.theme=t;store.set('th',t);$('#themeb').textContent=t==='dark'?'☀️':'🌙';$('#themeb').title=tr(t==='dark'?'tb_light':'tb_dark')}
+$('#themeb').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
+function setSen(v){document.body.classList.toggle('sen',v);$('#senb').classList.toggle('on',v);store.set('sen',v?'1':'')}
+$('#senb').onclick=()=>setSen(!senOn());
+let _th=null;
+window.addEventListener('beforeprint',()=>{_th=document.documentElement.dataset.theme;document.documentElement.dataset.theme='light'});
+window.addEventListener('afterprint',()=>{if(_th)document.documentElement.dataset.theme=_th});
+$('#prb').onclick=()=>window.print();
+$('#pdfb').onclick=()=>{toast(tr('tb_pdfh'));setTimeout(()=>window.print(),900)};
+$$('[data-say]').forEach(b=>b.onclick=()=>{try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance($('#'+b.dataset.say).innerText);u.lang=['kk-KZ','ru-RU','en-US'][li];speechSynthesis.speak(u)}catch(e){}});
+$$('#langs button').forEach(b=>b.onclick=()=>setLang(+b.dataset.lg));
+function setLang(i){li=i;store.set('lg',i);document.documentElement.lang=LC[i];document.title=tr('doc_t');
+  $$('#langs button').forEach((b,j)=>b.classList.toggle('on',j===i));
+  applyStatic();buildEq();buildTest();buildChips();drawLab();drawApps();drawSim();updateSA();keyTxt();
+  $('#themeb').title=tr(document.documentElement.dataset.theme==='dark'?'tb_light':'tb_dark');
+  if($('#uu').textContent)$('#uu').textContent=Us+' '+tr('u_V');drawG()}
+/* ---------- Barsik ---------- */
+const bm=$('#bm');let hist=[];
+function say(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;bm.appendChild(d);bm.scrollTop=1e9;return d}
+$('#bb').onclick=()=>{const p=$('#bp');p.style.display=p.style.display==='flex'?'none':'flex';$('#bsay').style.display=p.style.display==='flex'?'none':'block';if(!bm.children.length)say(tr('b_greet'),'b')};
+$('#bx').onclick=()=>{$('#bp').style.display='none';$('#bsay').style.display='block'};
+$('#gear').onclick=()=>{const k=prompt(tr('b_gear'),store.get('akey'));if(k!==null)store.set('akey',k.trim())};
+let aiNote=false,busy=false;
+async function ask(q){if(busy)return;busy=true;say(q,'u');hist.push({role:'user',content:q});const w=say('…','b');
+  try{const t=await ai(SYS_B(),hist.slice(-8));w.textContent=t;hist.push({role:'assistant',content:t})}
+  catch(err){hist.pop();w.textContent=local(q);if(!aiNote){aiNote=true;say(tr('b_offline'),'b')}}
+  busy=false}
+$('#bf').onsubmit=e=>{e.preventDefault();const q=$('#bi').value.trim();if(!q)return;$('#bi').value='';ask(q)};
+function buildChips(){$('#bch').innerHTML=[1,2,3,4].map(i=>`<button type="button" data-q="bc${i}">${tr('bc'+i)}</button>`).join('');
+  $$('#bch button').forEach(b=>b.onclick=()=>ask(tr(b.dataset.q)))}
+/* ---------- start ---------- */
+buildSA();mkDV(1);mkDV(2);
+setTheme(store.get('th')==='dark'?'dark':'light');setSen(!!store.get('sen'));
+setLang(li);
+</script>
+</body></html>
